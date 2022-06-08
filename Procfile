@@ -1,0 +1,1 @@
+worker: ./mvnw spring-boot:run
