@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'Oracle OpenJDK'
+        distribution: 'microsoft'
         cache: maven
     - name: Build with Maven
       run: ./mvnw -Dmaven.test.skip=true install
@@ -34,7 +34,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'Oracle OpenJDK'
+        distribution: 'microsoft'
         cache: maven
     - name: Test with maven
       run: ./mvnw test
