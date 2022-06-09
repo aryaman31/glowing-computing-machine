@@ -20,8 +20,14 @@ jobs:
         node-version: 16
     - name: Install Dependencies
       run: cd frontend && npm install
-    - name: Build React components and place in static
+    - name: Build React components
       run: cd frontend && npm run build
+    - name: Delete current contents of src/main/resources/static
+      run: rm -rf src/main/resources/static/*
+    - name: Move built react app to strings static folder
+      run: mv frontend/build/* src/main/resources/static/
+    - name: Delete original build directory
+      run: rm -r frontend/build/
 
   build-server:
 
