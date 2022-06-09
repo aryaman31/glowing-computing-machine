@@ -19,7 +19,7 @@ jobs:
       with:
         node-version: 16
     - name: Install Dependencies
-      run: npm install
+      run: cd frontend && npm install
     - name: Build React components and place in static
       run: cd frontend && npm run build
 
