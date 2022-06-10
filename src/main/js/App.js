@@ -9,7 +9,7 @@ const ReactDOM = require('react-dom'); // <2>
 class App extends React.Component { // <1>
 	render() { // <3>
 		return (
-			<p>Ur mom is gay</p>
+			<p>Aphelios is too complicated</p>
 		)
 	}
 }
