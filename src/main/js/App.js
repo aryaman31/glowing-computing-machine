@@ -1,23 +1,53 @@
-'use strict';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './Home';
+import BookAppointmentPage from './BookAppointmentPage';
+import ViewAppointmentPage from './ViewAppointmentPage';
+import YourAppointmentPage from './YourAppointmentPage';
+import AppointmentNote from './AppointmentNote';
+import Login from './Login';
 
-// tag::vars[]
-const React = require('react'); // <1>
-const ReactDOM = require('react-dom'); // <2>
-// end::vars[]
+function App() {
 
-// tag::app[]
-class App extends React.Component { // <1>
-	render() { // <3>
-		return (
-			<p>Aphelios is too complicated</p>
-		)
-	}
+  const [name, setName] = useState('');
+
+  const [upcomings, setUpcoming] = useState([]);
+
+  return (
+    <Router>
+      <div className='app'>
+        <div className='content'>
+          <Switch>
+
+            <Route exact path="/">
+              <Login name={name} setName={setName}/>  
+            </Route>  
+
+            <Route exact path="/home">
+              <Home name={name}/>
+            </Route>
+
+            <Route exact path="/bookings">
+              <BookAppointmentPage setUpcoming={setUpcoming} name={name} />
+            </Route>
+
+            <Route exact path="/view">
+              <ViewAppointmentPage upcomings={upcomings} setUpcoming={setUpcoming} />
+            </Route>
+
+            <Route exact path="/your_appointment/:aid">
+              <YourAppointmentPage upcomings={upcomings} />
+            </Route>
+
+            <Route exact path="/note">
+              <AppointmentNote/>
+            </Route>
+
+          </Switch>
+        </div>
+      </div>
+    </Router>
+  );
 }
-// end::app[]
 
-// tag::render[]
-ReactDOM.render(
-	<App />,
-	document.getElementById('react')
-)
-// end::render[]
+export default App;
