@@ -40773,7 +40773,7 @@ function Home(_ref) {
     children: /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsxs"])("nav", {
       className: "navbar",
       children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsxs"])("h1", {
-        children: ["Welcome ", name, "!"]
+        children: ["Welcome, ", name, "!"]
       }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])("h2", {
         children: "What would you like to do?"
       }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsxs"])("div", {
@@ -40783,10 +40783,10 @@ function Home(_ref) {
           children: /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])("button", {
             children: "Book an appointment"
           })
-        }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])("br", {}), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
           to: "/view",
           children: /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])("button", {
-            children: "View your appointment"
+            children: "View my appointments"
           })
         }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])("br", {}), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__["jsx"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
           to: "/",
@@ -40964,14 +40964,20 @@ function ViewAppointmentPage(_ref) {
       children: "Your appointments"
     }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsxs"])("div", {
       children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])("p", {
-        children: "Upcoming appointments"
+        style: {
+          fontWeight: 'bold'
+        },
+        children: "Upcoming appointments:"
       }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])(_AppointmentList__WEBPACK_IMPORTED_MODULE_1__["default"], {
         upcomings: upcomings,
         setUpcoming: setUpcoming
       })]
     }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])("br", {}), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsxs"])("div", {
-      children: ["Previous appointments", /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])("p", {
-        children: "placeholder"
+      children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])("p", {
+        style: {
+          fontWeight: 'bold'
+        },
+        children: "Previous appointments:"
       }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__["jsx"])(_PreviousAppointments__WEBPACK_IMPORTED_MODULE_3__["default"], {
         prevappoint: placeholder
       })]
