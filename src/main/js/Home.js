@@ -5,7 +5,7 @@ export default function Home({ name }) {
   return (
     <>
       <nav className='navbar'>
-        <h1>Welcome {name}!</h1>
+        <h1>Welcome, {name}!</h1>
         <h2>What would you like to do?</h2>
 
         <div className='options'>
@@ -14,8 +14,11 @@ export default function Home({ name }) {
             <button>Book an appointment</button>
           </Link>
 
+          <br/>
+
+
           <Link to="/view">
-            <button>View your appointment</button>
+            <button>View my appointments</button>
           </Link>
 
           <br/>

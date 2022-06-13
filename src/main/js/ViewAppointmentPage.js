@@ -16,16 +16,16 @@ export default function ViewAppointmentPage({ upcomings, setUpcoming }) {
       <h1>Your appointments</h1>
       
       <div>
-        <p>Upcoming appointments</p>
+      <p style={{fontWeight: 'bold'}}>Upcoming appointments:</p>
         <AppointmentList upcomings={upcomings} setUpcoming={setUpcoming} />
       </div>
 
       <br/>
 
       <div>
-        Previous appointments
+      <p style={{fontWeight: 'bold'}}>Previous appointments:</p>
         {/* TODO: get previous appointments from database and remove placeholder */}
-        <p>placeholder</p>
+        {/* <p>placeholder</p> */}
         <PreviousAppointments prevappoint={placeholder} />
       </div>
 
