@@ -40535,19 +40535,32 @@ function Appointment(_ref) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AppointmentList; });
 /* harmony import */ var _Appointment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Appointment */ "./src/main/js/Appointment.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Dialog_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dialog.jsx */ "./src/main/js/Dialog.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -40556,23 +40569,54 @@ function AppointmentList(_ref) {
   var upcomings = _ref.upcomings,
       setUpcoming = _ref.setUpcoming;
 
-  function handleCancel(k) {
-    var temp = _toConsumableArray(upcomings);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_2__["useState"])({
+    message: '',
+    isLoading: false
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      dialog = _useState2[0],
+      setDialog = _useState2[1];
 
-    setUpcoming(temp.filter(function (elem) {
-      return elem.id !== k;
-    }));
+  var idProductRef = Object(react__WEBPACK_IMPORTED_MODULE_2__["useRef"])();
+
+  var handleDialog = function handleDialog(message, isLoading) {
+    setDialog({
+      message: message,
+      isLoading: isLoading
+    });
+  };
+
+  function handleCancel(k) {
+    handleDialog('Are you sure you want to cancel this appointment?', true);
+    idProductRef.current = k; // const temp = [...upcomings]
+    // setUpcoming(temp.filter(elem => elem.id !== k))
   }
 
+  var areUSureDelete = function areUSureDelete(choose) {
+    if (choose) {
+      var temp = _toConsumableArray(upcomings);
+
+      setUpcoming(temp.filter(function (elem) {
+        return elem.id !== idProductRef.current;
+      }));
+      handleDialog('', false);
+    } else {
+      handleDialog('', false);
+    }
+  };
+
   return upcomings.map(function (a) {
-    return /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__["jsxs"])("div", {
-      children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__["jsx"])(_Appointment__WEBPACK_IMPORTED_MODULE_0__["default"], {
+    return /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__["jsxs"])("div", {
+      children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__["jsx"])(_Appointment__WEBPACK_IMPORTED_MODULE_0__["default"], {
         appointment: a
-      }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__["jsx"])("button", {
+      }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__["jsx"])("button", {
         onClick: function onClick() {
           return handleCancel(a.id);
         },
         children: "Cancel appointment"
+      }), dialog.isLoading && /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__["jsx"])(_Dialog_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        onDialog: areUSureDelete,
+        message: dialog.message
       })]
     }, a.id);
   });
@@ -40744,6 +40788,83 @@ function BookAppointmentPage(_ref) {
     })]
   });
 }
+
+/***/ }),
+
+/***/ "./src/main/js/Dialog.jsx":
+/*!********************************!*\
+  !*** ./src/main/js/Dialog.jsx ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Dialog; });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function Dialog(_ref) {
+  var message = _ref.message,
+      onDialog = _ref.onDialog;
+  return /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("div", {
+    style: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      bottom: "0",
+      backgroundColor: "rgba(0,0,0,0.5)"
+    },
+    children: /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxs"])("div", {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%,-50%)",
+        background: "white",
+        padding: "50px"
+      },
+      children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("h3", {
+        style: {
+          color: '#111'
+        },
+        children: message
+      }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsxs"])("div", {
+        style: {
+          display: "flex",
+          alignItems: "center"
+        },
+        children: [/*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("button", {
+          onClick: function onClick() {
+            return onDialog(true);
+          },
+          style: {
+            padding: "10px",
+            marginRight: "4px",
+            cursor: "pointer"
+          },
+          children: " Yes "
+        }), /*#__PURE__*/Object(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__["jsx"])("button", {
+          onClick: function onClick() {
+            return onDialog(false);
+          },
+          style: {
+            padding: "10px",
+            marginLeft: "4px",
+            cursor: "pointer"
+          },
+          children: " No "
+        })]
+      })]
+    })
+  });
+} // export default Dialog
 
 /***/ }),
 
