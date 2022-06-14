@@ -1,4 +1,4 @@
-package com.example.gp_scheduling;
+package com.gp_scheduling;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @SpringBootApplication
 @Controller
-public class GpSchedulingApplication {
+public class web_server {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GpSchedulingApplication.class, args);
+		SpringApplication.run(web_server.class, args);
 	}
 
 	@RequestMapping(value = "/")
