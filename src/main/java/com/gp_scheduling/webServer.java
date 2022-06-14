@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @SpringBootApplication
 @Controller
-public class web_server {
+public class webServer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(web_server.class, args);
+		SpringApplication.run(webServer.class, args);
 	}
 
 	@RequestMapping(value = "/")
