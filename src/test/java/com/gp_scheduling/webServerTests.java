@@ -1,10 +1,10 @@
-package com.example.gp_scheduling;
+package com.gp_scheduling;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GpSchedulingApplicationTests {
+class webServerTests {
 
 	@Test
 	void contextLoads() {
