@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.4",
+    "date-fns": "^2.28.0",
     "react": "^18.1.0",
+    "react-big-calendar": "^0.40.1",
     "react-dom": "^18.1.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^5.3.3",
