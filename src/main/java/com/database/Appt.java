@@ -1,102 +1,89 @@
 package com.database;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
+import java.sql.Timestamp;
 
-import java.util.Date;
-import java.util.List;
+public class Appt {
+    private int patient_id;
+    private int gp_id;
+    private Timestamp start_time;
+    private Timestamp end_time;
+    private String subject;
+    private int appt_file;
+    private boolean cancelled;
 
-public class Appt implements Storeable {
-
-    final String id;
-    final Date dateTime;
-    String patientId; // Form patient object as needed
-    String gpId; // Form gp object as needed
-    List<String> viewerIds; // List of people with view permissions on this record (by ID)
-    int duration = 0; // EST when booking, after completion updated to be accurate
-    String issue = "";
-    String subject = "";
-    String description = "";
-    String notes = "";
-    boolean completed = false;
-    Practice practice;
-
-    public Appt(Date dateTime, String patientId, String gpId, Practice practice) {
-        // Could refactor a factory out of here
-        this.dateTime = dateTime;
-        this.patientId = patientId;
-        this.gpId = gpId;
-        // At its base, an appointment is defined as a meeting between a GP and a Patient at a time
-        // If any of these are changed, it ceases to be the same appointment
-        this.completed = false;
-        this.id = this.dateTime.toString() +"-"+ this.gpId;
-        this.practice = practice;
+    public Appt(int patient_id, int gp_id, Timestamp start_time, Timestamp end_time, String subject, int appt_file, boolean cancelled) {
+        this.patient_id = patient_id;
+        this.gp_id = gp_id;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.subject = subject;
+        this.appt_file = appt_file;
+        this.cancelled = cancelled;
     }
 
-    public static String formId(Date dateTime, String gpId) {
-        return dateTime.toString() + "-" + gpId;
+    public static Timestamp getEndTimeOnAppt(Timestamp start_time) {
+        // TODO
+        return null;
     }
 
-    public BasicDBObject toDocument() {
-        BasicDBObject document = new BasicDBObject("_id",id);
-        document.append("appointmentTime",dateTime);
-        document.append("duration",duration);
-        document.append("gp",gpId);
-        document.append("patient",patientId);
-        document.append("viewers",viewerIds);
-        document.append("subject",subject);
-        document.append("issue",issue);
-        document.append("notes",notes);
-        document.append("completed",completed);
-        return document;
+    public void setPatient_id(int patient_id) {
+        this.patient_id = patient_id;
     }
 
-    public static Appt getApptById(String appId, Practice practice) {
-        //TODO: Retrieve Appt data from database using query and then populate an object to process
-
-        DBCursor retrieved = practice.appts.find(new BasicDBObject("_id",appId));
-        DBObject document = retrieved.one();
-        Appt toRet = new Appt((Date) document.get("appointmentTime"),(String)document.get("patient"),(String) document.get("gp"),practice);
-        toRet.duration = (int) document.get("duration");
-        toRet.subject = (String) document.get("subject");
-        toRet.issue = (String) document.get("issue");
-        toRet.notes = (String) document.get("notes");
-        toRet.viewerIds = (List<String>) document.get("viewers");
-        toRet.completed = (boolean) document.get("completed");
-
-        return toRet;
+    public void setGp_id(int gp_id) {
+        this.gp_id = gp_id;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof Appt)) {
-            return false;
-        }
-
-        Appt other = (Appt) o;
-        if (other.id.equals(this.id)) {
-            return true;
-        } else {
-            return false;
-        }
+    public void setStart_time(Timestamp start_time) {
+        this.start_time = start_time;
     }
 
-
-
-    @Override
-    public int hashCode() {
-        return this.id.hashCode();
+    public void setEnd_time(Timestamp end_time) {
+        this.end_time = end_time;
     }
 
-    public String getId() {
-        return this.id;
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setAppt_file(int appt_file) {
+        this.appt_file = appt_file;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public int getPatient_id() {
+        return patient_id;
+    }
+
+    public int getGp_id() {
+        return gp_id;
+    }
+
+    public Timestamp getStart_time() {
+        return start_time;
+    }
+
+    public Timestamp getEnd_time() {
+        return end_time;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public int getAppt_file() {
+        return appt_file;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public boolean cancel() {
+        // TODO
+        return false;
     }
 }
-
-// Make mongoDB document adaptor

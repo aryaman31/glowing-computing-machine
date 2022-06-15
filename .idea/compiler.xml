@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="gp_scheduling" target="17" />
+      <module name="gp_scheduling" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
