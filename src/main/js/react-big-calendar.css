@@ -260,7 +260,7 @@ button.rbc-input::-moz-focus-inner {
   padding: 2px 31px;
   background-color: #3174ad;
   border-radius: 0px;
-  color: #fff;
+  color: transparent;
   cursor: pointer;
   width: 100%;
   text-align: left;
