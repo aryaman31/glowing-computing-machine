@@ -23,32 +23,40 @@ function App() {
           <Routes>
 
             <Route exact path="/">
-              <Login name={name} setName={setName}/>  
+              <Route exact path='/' element={<Login name={name} setName={setName}/>}/>  
             </Route>  
 
             <Route exact path="/home">
-              <Home name={name}/>
+            <Route exact path='/home' element={<Home name={name}/>}/>
             </Route>
 
             <Route exact path="/bookings">
-              <BookAppointmentPage 
-                setUpcoming={setUpcoming} 
-                name={name} 
-                allAppoints={allAppoints} 
-                setAllAppoints={setAllAppoints} 
-              />
+              <Route exact path='/bookings' element={
+                <BookAppointmentPage 
+                  setUpcoming={setUpcoming} 
+                  name={name} 
+                  allAppoints={allAppoints} 
+                  setAllAppoints={setAllAppoints} 
+                />
+              }/>
             </Route>
 
             <Route exact path="/view">
-              <ViewAppointmentPage upcomings={upcomings} setUpcoming={setUpcoming} />
+              <Route exact path='/view' element={
+                <ViewAppointmentPage upcomings={upcomings} setUpcoming={setUpcoming} />
+              }/>
             </Route>
 
             <Route exact path="/your_appointment/:aid">
-              <YourAppointmentPage upcomings={upcomings} />
+              <Route exact path='/your_appointment/:aid' element={
+                <YourAppointmentPage upcomings={upcomings} />
+              }/>
             </Route>
 
             <Route exact path="/note">
-              <AppointmentNote/>
+              <Route exact path='/notes' element={
+                <AppointmentNote/>
+              }/>
             </Route>
 
           </Routes>
