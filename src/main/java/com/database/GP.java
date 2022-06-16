@@ -1,47 +1,59 @@
 package com.database;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import java.util.List;
+public class GP {
 
-public class GP extends User{
-    public GP(String firstNames,String surname,String id,Practice practice) {
-        super(firstNames, surname,id,practice);
-    }
+    private int gp_id;
+    private String first_name;
+    private String surname;
+    private String salted;
+    private String salt;
 
-    public static GP getGpById(String id, Practice practice) {
-        DBCursor retrieved = practice.gps.find(new BasicDBObject("_id",id));
-        // Should really only have 1 - IDs are unique and if they aren't we've fucked up
-        DBObject document = retrieved.one(); // Add error checking here
-        GP objToReturn = new GP(
-                (String) document.get("firstNames"),
-                (String) document.get("surname"),
-                (String) document.get("_id"),
-                practice); // We can guarantee these casts are safe because we have been adding to the database
-        User.populateUserFromDocument(document,objToReturn);
-        return objToReturn;
-    }
-
-    @Override
-    public BasicDBObject toDocument() {
-        // No extra fields required as of yet
-        return super.toDocument();
+    public GP(int gp_id, String first_name, String surname, String salted, String salt) {
+        this.gp_id = gp_id;
+        this.first_name = first_name;
+        this.surname = surname;
+        this.salted = salted;
+        this.salt = salt;
     }
 
 
+    public void setGp_id(int gp_id) {
+        this.gp_id = gp_id;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setSalted(String salted) {
+        this.salted = salted;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public int getGp_id() {
+        return gp_id;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getSalted() {
+        return salted;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
 }
-
-/**
- *   final String id;
- *     final LocalDateTime dateTime;
- *     final Patient patient; // This is the owner and should have control over the data
- *     final GP gp;
- *     List<User> viewers; // List of people with view permissions on this record
- *     int duration = 0; // EST when booking, after completion updated to be accurate
- *     String issue = "";
- *     String subject = "";
- *     String description = "";
- *     String notes = "";
- *     boolean completed;
- */

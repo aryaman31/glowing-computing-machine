@@ -1,82 +1,82 @@
 package com.database;
 
-import com.mongodb.*;
+public class Patient {
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Stream;
+    int patient_id;
+    String first_name;
+    String surname;
+    int clinic_id;
+    int hospital_id;
+    String salted;
+    String salt;
 
-public class Patient extends User{
-    List<Appt> appointments = new LinkedList<>();
-    GP currentGP;
+    public Patient(int patient_id, String first_name, String surname, int clinic_id, int hospital_id, String salted, String salt) {
 
-    public Patient(String FirstNames, String Surname,String id, Practice practice,GP currentGP) {
-        super(FirstNames,Surname,id,practice);
-        this.currentGP = currentGP;
+
+        this.patient_id = patient_id;
+        this.first_name = first_name;
+        this.surname = surname;
+        this.clinic_id = clinic_id;
+        this.hospital_id = hospital_id;
+        this.salted = salted;
+        this.salt = salt;
+
     }
 
-    // Setters will need to update db, depends on whether we use documents or ood
-    public void setGP(GP gp) {
-        this.currentGP = gp;
-    }
-    public GP getCurrentGP() {
-        return this.currentGP;
+    public int getPatient_id() {
+        return patient_id;
     }
 
-    @Override
-    public BasicDBObject toDocument() {
-        BasicDBObject patientDoc = super.toDocument(); // Cast safe because we have control over User superclass
-        patientDoc.append("currentGP",currentGP.id); // Object reference by id
-        patientDoc.append("appointments",appointments.stream().map(Appt::getId).toArray());
-        return patientDoc;
+    public void setPatient_id(int patient_id) {
+        this.patient_id = patient_id;
     }
 
-
-    public static Patient getPatientById(String id,Practice practice) {
-        DBCursor retrieved = practice.patients.find(new BasicDBObject("_id",id));
-        // Should really only have 1 - IDs are unique and if they aren't we've fucked up
-        DBObject document = retrieved.one(); // Add error checking here
-        Patient objToReturn = new Patient(
-                (String) document.get("firstNames"),
-                (String) document.get("surname"),
-                (String) document.get("_id"),
-                practice,
-                GP.getGpById((String) document.get("currentGP"),practice)
-        ); // We can guarantee these casts are safe because we have been adding to the database
-        List<Appt> ApptIdsdocument =
-                ((List<String>) document.get("appointments")).stream().map(x -> Appt.getApptById(x,practice)).toList();
-        User.populateUserFromDocument(document,objToReturn);
-        return objToReturn;
+    public String getFirst_name() {
+        return first_name;
     }
 
-
-
-
-    // Actual functionality
-    public void addApt(Appt appointment) {
-        // will need to update db but for now done on object
-        // booking not made here, enforced through "practice" bookAppt - Attempt to reduce concurrency issues
-        this.appointments.add(appointment); // May want to make this so that it inserts ordered but not important for now
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public void rmvApt(Appt appointment) {
-        this.appointments.remove(appointment);
+    public String getSurname() {
+        return surname;
     }
 
-    public boolean rmvApt(String apptId) {
-        for (Appt i : appointments) {
-            if (i.id == apptId) {
-                appointments.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    // Reschedule consists of an add and a rmv
+    public int getClinic_id() {
+        return clinic_id;
+    }
 
-    // view appointment dependent on retrieving from database
+    public void setClinic_id(int clinic_id) {
+        this.clinic_id = clinic_id;
+    }
+
+    public int getHospital_id() {
+        return hospital_id;
+    }
+
+    public void setHospital_id(int hospital_id) {
+        this.hospital_id = hospital_id;
+    }
+
+    public String getSalted() {
+        return salted;
+    }
+
+    public void setSalted(String salted) {
+        this.salted = salted;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
 }
