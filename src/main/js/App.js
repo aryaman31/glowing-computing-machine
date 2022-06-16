@@ -22,42 +22,44 @@ function App() {
         <div className='content'>
           <Routes>
 
-            <Route exact path="/">
-              <Route exact path='/' element={<Login name={name} setName={setName}/>}/>  
-            </Route>  
+            <Route path="/" element={<Login name={name} setName={setName}/>}/>  
 
-            <Route exact path="/home">
-            <Route exact path='/home' element={<Home name={name}/>}/>
-            </Route>
 
-            <Route exact path="/bookings">
-              <Route exact path='/bookings' element={
+            <Route path="/home" element={<Home name={name}/>}/>
+
+
+            <Route path="/bookings" 
+              element={
                 <BookAppointmentPage 
                   setUpcoming={setUpcoming} 
                   name={name} 
                   allAppoints={allAppoints} 
                   setAllAppoints={setAllAppoints} 
                 />
-              }/>
-            </Route>
+              }
+            />
 
-            <Route exact path="/view">
-              <Route exact path='/view' element={
+
+            <Route path="/view" 
+              element={
                 <ViewAppointmentPage upcomings={upcomings} setUpcoming={setUpcoming} />
-              }/>
-            </Route>
+              }
+            />
 
-            <Route exact path="/your_appointment/:aid">
-              <Route exact path='/your_appointment/:aid' element={
+
+            <Route path="/your_appointment/:aid" 
+              element={
                 <YourAppointmentPage upcomings={upcomings} />
-              }/>
-            </Route>
+              }
+            />
 
-            <Route exact path="/note">
-              <Route exact path='/notes' element={
+
+            <Route path="/note" 
+              element={
                 <AppointmentNote/>
-              }/>
-            </Route>
+              }
+            />
+
 
           </Routes>
         </div>
