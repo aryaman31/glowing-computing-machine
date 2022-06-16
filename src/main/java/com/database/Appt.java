@@ -88,6 +88,7 @@ public class Appt implements Storeable {
     }
 
     public boolean cancel(DB db) {
+        db.makeConnection();
         String changeString = "DELETE FROM appointments WHERE start_time = ? AND gp_id = ?";
         PreparedStatement change;
         try {
@@ -98,41 +99,35 @@ public class Appt implements Storeable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return false;
+        } finally {
+            db.closeConnection();
         }
         return true;
     }
 
     @Override
     public boolean save(DB db) {
+
         db.makeConnection();
-        String changeString = "UPDATE gps SET ? = ? WHERE gp_id = ?";
+        String changeString =
+                "INSERT INTO appointments " +
+                        "(patient_id, gp_id, start_time, end_time, subject, appt_file, cancelled)" +
+                        " VALUES (?, ?, ?, ? , ?, ?, ?)";
         PreparedStatement change;
         try {
             change = db.getConnection().prepareStatement(changeString);
-            change.setInt(3, this.gp_id);
+            change.setInt(1, this.patient_id);
+            change.setInt(2, this.gp_id);
+            change.setTimestamp(3, this.start_time);
+            change.setTimestamp(4, new Timestamp(this.start_time.getTime() + 60 * 15 * 1_000));
+            change.setString(5,this.subject);
+            change.setInt(6,-1);
+            change.setBoolean(7,false);
+            change.executeUpdate();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return false;
-        }
-        if (changed[0]) {
-            try {
-                change.setString(1, "subject");
-                change.setString(2, this.subject);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[1]) {
-            try {
-                change.setString(1, "appt_file");
-                change.setInt(2, this.appt_file);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
         }
         db.closeConnection();
         return true;

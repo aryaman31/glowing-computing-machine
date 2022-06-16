@@ -2,12 +2,14 @@ package com.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 public class DBWrapper implements DB {
 
     Connection con = null;
+    String dburl = System.getenv("DATABASE_URL");
 
     @Override
     public boolean setup() {
@@ -15,7 +17,7 @@ public class DBWrapper implements DB {
          */
 
         // Older java requires Class.forName() to load the driver
-        String url = "jdbc:postgresql://127.0.0.1:5432/main"; // current
+        String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
         Properties prop = new Properties();
         prop.setProperty("user", "lucas");
@@ -94,6 +96,46 @@ public class DBWrapper implements DB {
 
         return true;
 
+    }
+
+    @Override
+    public void populate() {
+        try {
+
+            this.makeConnection();
+            String insertString =  "INSERT INTO patients (patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
+                    "VALUES (?, ?,  ?, ?, ?, ?, ?)";
+            PreparedStatement insertPatient = con.prepareStatement(insertString);
+            insertPatient.setInt(1,1);
+            insertPatient.setString(2,"Alice");
+            insertPatient.setString(3,"Smith");
+            insertPatient.setInt(4,1);
+            insertPatient.setInt(5,1);
+            insertPatient.setString(6,"");
+            insertPatient.setString(7,"");
+            insertPatient.executeUpdate();
+            insertPatient.setInt(1,2);
+            insertPatient.setString(2,"Bob");
+            insertPatient.setString(3,"Jones");
+            insertPatient.executeUpdate();
+            insertPatient.setInt(1,3);
+            insertPatient.setString(2,"Charlie");
+            insertPatient.setString(3,"Skinner");
+            insertPatient.executeUpdate();
+            insertString =  "INSERT INTO gps (gp_id, first_name, surname, salted, salt) " +
+                    "VALUES (?, ?,  ?, ?, ?)";
+            PreparedStatement insertGP = con.prepareStatement(insertString);
+            insertGP.setInt(1,111);
+            insertGP.setString(2,"Thomas");
+            insertGP.setString(3,"Jackson");
+            insertGP.setString(4,"");
+            insertGP.setString(5,"");
+            insertGP.executeUpdate();
+            this.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
     }
 
     @Override
@@ -262,7 +304,7 @@ public class DBWrapper implements DB {
          */
 
         // Older java requires Class.forName() to load the driver
-        String url = "jdbc:postgresql://127.0.0.1:5432/main"; // current
+        String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
         Properties prop = new Properties();
         prop.setProperty("user", "lucas");

@@ -29,4 +29,5 @@ public interface DB {
     public int getNumGPAppointments(int gpId, Timestamp currentTime, Timestamp start_time);
 
 
+    public void populate();
 }
