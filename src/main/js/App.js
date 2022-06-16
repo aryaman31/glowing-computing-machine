@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import BookAppointmentPage from './BookAppointmentPage';
 import ViewAppointmentPage from './ViewAppointmentPage';
@@ -20,7 +20,7 @@ function App() {
     <Router>
       <div className='app'>
         <div className='content'>
-          <Switch>
+          <Routes>
 
             <Route exact path="/">
               <Login name={name} setName={setName}/>  
@@ -51,7 +51,7 @@ function App() {
               <AppointmentNote/>
             </Route>
 
-          </Switch>
+          </Routes>
         </div>
       </div>
     </Router>
