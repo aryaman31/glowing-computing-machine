@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export default function Login({ name, setName }) {
+
+  const navigate = useNavigate();
 
   const [password, setPassword] = useState(''); 
 
@@ -13,6 +15,7 @@ export default function Login({ name, setName }) {
     console.log(name);
     console.log(password);
 
+    navigate('/home')
   }
 
   return (
@@ -37,9 +40,9 @@ export default function Login({ name, setName }) {
                 onChange={(e) => setPassword(e.target.value)}
                 />
           </div>
-          <Link to='/home'>
-            <button type="submit">Submit</button>
-          </Link>
+
+          <button type="submit">Submit</button>
+
       </form>
       </>
     
