@@ -47,6 +47,8 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
   function handleSelectEvent(e) {
     setStartTime(e.start)
     setEndTime(e.end)
+    setHasSelected(true)
+    
     console.log("RESERVED SLOT CLICKED, SEND TO WAITING LIST")
   }
 
