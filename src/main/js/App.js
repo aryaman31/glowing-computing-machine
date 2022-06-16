@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
-import BookAppointmentPage from './booking/BookAppointmentPage';
-import ViewAppointmentPage from './viewing/ViewAppointmentPage';
-import YourAppointmentPage from './viewing/YourAppointmentPage';
-import AppointmentNote from './viewing/AppointmentNote';
+import BookAppointmentPage from './BookAppointmentPage';
+import ViewAppointmentPage from './ViewAppointmentPage';
+import YourAppointmentPage from './YourAppointmentPage';
+import AppointmentNote from './AppointmentNote';
 import Login from './Login';
-import Test from './booking/Test';
 
 function App() {
 
