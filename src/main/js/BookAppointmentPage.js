@@ -120,14 +120,12 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
 
 {/*-------------------------------------------------------------------------------------------------*/}
 
+    <h2>Pick an appointment slot</h2>
+
     <div>
       <p>Please select a doctor you would like to meet</p>
       <input ref={doctorRef} type="text" size={32} placeholder='Type "any" if you have no preference'/>
     </div>
-
-{/*-------------------------------------------------------------------------------------------------*/}
-
-    <h2>Pick an appointment slot</h2>
   
     <p>Please select a date you would like to have your appointment</p>
     <p>Blue boxes indicates that the slot has already been reserved</p>
@@ -151,14 +149,17 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
 
     <Slot startTime={startTime} endTime={endTime} hasSelected={hasSelected} />
       
+    <br/>  
     
-    <Link to="/view">
-      <button onClick={handleConfirmation}>Confirm</button>
-    </Link>
+    <div>
+      <Link to="/view">
+        <button onClick={handleConfirmation}>Confirm</button>
+      </Link>
 
-    <Link to="/home">
-      <button>Back</button>
-    </Link>  
+      <Link to="/home">
+        <button>Back</button>
+      </Link>
+    </div>  
 
     </>
   )
