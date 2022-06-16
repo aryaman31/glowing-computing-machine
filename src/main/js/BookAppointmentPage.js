@@ -94,13 +94,40 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
 
   return (
     <>
-    <h1>Let's book an appointment</h1>
+    <h1>Let's book an appointment!</h1>
+    
+
+{/*-------------------------------------------------------------------------------------------------*/}
+
+    <h2>Tell us about your condition</h2>
+    <div>
+      <p>1. What is your problem:</p>
+      <input ref={problemRef} type="text" size={50} placeholder='eg. "Persistent back-ache"'/>
+    </div>
+
+{/*-------------------------------------------------------------------------------------------------*/}
+
+    <div>
+      <p>2. Give further details you wish to share:</p>
+      <textarea
+        ref={descriptionRef}
+        rows={20}
+        cols={50}
+        placeholder='eg. "Experiencing strong pain in upper-back for 4 weeks"'></textarea>
+    </div>
+
+    <br/>
+
+{/*-------------------------------------------------------------------------------------------------*/}
+
     <div>
       <p>Please select a doctor you would like to meet</p>
       <input ref={doctorRef} type="text" size={32} placeholder='Type "any" if you have no preference'/>
     </div>
 
 {/*-------------------------------------------------------------------------------------------------*/}
+
+    <h2>Pick an appointment slot</h2>
   
     <p>Please select a date you would like to have your appointment</p>
     <p>Blue boxes indicates that the slot has already been reserved</p>
@@ -123,38 +150,15 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
     </div>
 
     <Slot startTime={startTime} endTime={endTime} hasSelected={hasSelected} />
-
-
-   
-
-{/*-------------------------------------------------------------------------------------------------*/}
-
-    <h1>Tell us about your condition</h1>
-    <div>
-      <p>1. What is your problem:</p>
-      <input ref={problemRef} type="text" size={50} placeholder='eg. "Persistent back-ache"'/>
-    </div>
-
-{/*-------------------------------------------------------------------------------------------------*/}
-
-    <div>
-      <p>2. Give further details you wish to share:</p>
-      <textarea
-        ref={descriptionRef}
-        rows={20}
-        cols={50}
-        placeholder='eg. "Experiencing strong pain in upper-back for 4 weeks"'></textarea>
-    </div>
-
-    <br/>
-
+      
+    
     <Link to="/view">
       <button onClick={handleConfirmation}>Confirm</button>
     </Link>
 
     <Link to="/home">
       <button>Back</button>
-    </Link>
+    </Link>  
 
     </>
   )
