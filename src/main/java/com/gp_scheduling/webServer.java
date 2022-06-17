@@ -14,6 +14,7 @@ public class webServer {
 	public static void main(String[] args) {
 		db = new DBWrapper();
 		db.setup();
+		db.populate();
 		SpringApplication.run(webServer.class, args);
 	}
 

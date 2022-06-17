@@ -69,7 +69,7 @@ public class LogicFunctions {
     }
 
     public Timestamp getTimeStamp(String dateTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("\"yyyy/MM/dd HH:mm\"");
         try {
             return new Timestamp(sdf.parse(dateTime).getTime());
         } catch (ParseException e) {
@@ -90,11 +90,11 @@ public class LogicFunctions {
         Appt rash = new Appt(2, 111,
                 lf.getTimeStamp("2022/06/16 21:15"), lf.getTimeStamp("2022/06/16 21:30"),
                 "Rash", -1, false);
-        //lf.bookAppt(soreThroat);
-        //lf.bookAppt(rash);
+        lf.bookAppt(soreThroat);
+        lf.bookAppt(rash);
 
-        //lf.rescheduleAppt(soreThroat,lf.getTimeStamp("2023/06/16 21:30"),lf.getTimeStamp("2023/06/16 21:45"));
-        //lf.cancelAppt(rash);
+        lf.rescheduleAppt(soreThroat,lf.getTimeStamp("2023/06/16 21:30"),lf.getTimeStamp("2023/06/16 21:45"));
+        lf.cancelAppt(rash);
         rash.setStart_time(lf.getTimeStamp("2023/06/16 21:30"));
         rash.setEnd_time(lf.getTimeStamp("2023/06/16 21:45"));
         lf.bookAppt(rash);

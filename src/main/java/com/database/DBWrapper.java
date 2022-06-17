@@ -6,7 +6,7 @@ import java.util.*;
 public class DBWrapper implements DB {
 
     Connection con = null;
-    String dburl = System.getenv("DATABASE_URL");
+    String dburl = "jdbc:" + System.getenv("DATABASE_URL");
 
     @Override
     public boolean setup() {
@@ -17,8 +17,8 @@ public class DBWrapper implements DB {
         String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
         Properties prop = new Properties();
-        prop.setProperty("user", "lucas");
-        prop.setProperty("password", "password");
+        prop.setProperty("user", "postgres");
+        prop.setProperty("password", "123");
         prop.setProperty("ssl", "false");
         try {
             Class.forName("org.postgresql.Driver");
@@ -87,6 +87,7 @@ public class DBWrapper implements DB {
 
             con.close();
         } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("DATABSE NOT CONNECTED");
             e.printStackTrace();
             return false;
         }
@@ -98,8 +99,6 @@ public class DBWrapper implements DB {
     @Override
     public void populate() {
         try {
-
-            this.makeConnection();
             String insertString =  "INSERT INTO patients (patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
                     "VALUES (?, ?,  ?, ?, ?, ?, ?)";
             PreparedStatement insertPatient = con.prepareStatement(insertString);
@@ -131,6 +130,7 @@ public class DBWrapper implements DB {
             this.closeConnection();
 
         } catch (SQLException e) {
+            System.out.println("DATABSE COULDNT POPULATE ANYTHING");
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
     }
@@ -304,8 +304,8 @@ public class DBWrapper implements DB {
         String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
         Properties prop = new Properties();
-        prop.setProperty("user", "lucas");
-        prop.setProperty("password", "password");
+        prop.setProperty("user", "postgres");
+        prop.setProperty("password", "123");
         prop.setProperty("ssl", "false");
         try {
             Class.forName("org.postgresql.Driver");
