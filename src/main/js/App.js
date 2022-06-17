@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import BookAppointmentPage from './BookAppointmentPage';
@@ -7,14 +7,52 @@ import YourAppointmentPage from './YourAppointmentPage';
 import AppointmentNote from './AppointmentNote';
 import Login from './Login';
 
+const KEY_1 = 'app.upcomings'
+const KEY_2 = 'app.allAppoints'
+
 function App() {
 
   const [name, setName] = useState('');
 
   const [upcomings, setUpcoming] = useState([]);
 
+  const [patientId, setPatientId] = useState();
   //get all appointments from database
   const [allAppoints, setAllAppoints] = useState([]) 
+
+  // useEffect(() => {
+  //   fetch()
+  // })
+
+  useEffect(() => {
+    const storedUpcomings = JSON.parse(localStorage.getItem(KEY_1))
+    if (storedUpcomings) {
+      setUpcoming(storedUpcomings)
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(KEY_1, JSON.stringify(upcomings));
+    console.log("IM HERREERREER");
+  }, [upcomings])
+
+  useEffect(() => {
+    const storedAllAppoints = JSON.parse(localStorage.getItem(KEY_2))
+    if (storedAllAppoints) {
+      storedAllAppoints.forEach(element => {
+        const s = element.start;
+        const e = element.end;
+        element.start = new Date(s)
+        element.end = new Date(e)
+      });
+      setAllAppoints(storedAllAppoints)
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem(KEY_2, JSON.stringify(allAppoints));
+    console.log("IM HERREERREER");
+  }, [allAppoints])
 
   return (
     <Router>
@@ -22,7 +60,7 @@ function App() {
         <div className='content'>
           <Routes>
 
-            <Route path="/" element={<Login name={name} setName={setName}/>}/>  
+            <Route path="/" element={<Login name={name} setName={setName} setPatientId={setPatientId}/>}/>  
 
 
             <Route path="/home" element={<Home name={name}/>}/>
