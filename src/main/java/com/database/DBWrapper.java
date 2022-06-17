@@ -6,7 +6,7 @@ import java.util.*;
 public class DBWrapper implements DB {
 
     Connection con = null;
-    String dburl = System.getenv("JDBC_DATABASE_USERNAME");
+    String dburl = System.getenv("JDBC_DATABASE_URL");
 
     @Override
     public boolean setup() {
