@@ -6,7 +6,7 @@ import java.util.*;
 public class DBWrapper implements DB {
 
     Connection con = null;
-    String dburl = System.getenv("DATABASE_URL");
+    String dburl = System.getenv("JDBC_DATABASE_USERNAME");
 
     @Override
     public boolean setup() {
@@ -16,14 +16,14 @@ public class DBWrapper implements DB {
         // Older java requires Class.forName() to load the driver
         String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
-        Properties prop = new Properties();
-        prop.setProperty("user", "postgres");
-        prop.setProperty("password", "123");
-        prop.setProperty("ssl", "false");
+//         Properties prop = new Properties();
+//         prop.setProperty("user", "postgres");
+//         prop.setProperty("password", "123");
+//         prop.setProperty("ssl", "false");
         try {
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection(url, prop);
-
+//             con = DriverManager.getConnection(url, prop);
+            con = DriverManager.getConnection(url);
             String createPatients =
                     "CREATE TABLE IF NOT EXISTS patients (" +
                             "patient_id bigint CONSTRAINT patient_key PRIMARY KEY," +
@@ -303,13 +303,14 @@ public class DBWrapper implements DB {
         // Older java requires Class.forName() to load the driver
         String url = dburl; // current
         // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
-        Properties prop = new Properties();
-        prop.setProperty("user", "postgres");
-        prop.setProperty("password", "123");
-        prop.setProperty("ssl", "false");
+//         Properties prop = new Properties();
+//         prop.setProperty("user", "postgres");
+//         prop.setProperty("password", "123");
+//         prop.setProperty("ssl", "false");
         try {
             Class.forName("org.postgresql.Driver");
-            this.con = DriverManager.getConnection(url, prop);
+//             this.con = DriverManager.getConnection(url, prop);
+            this.con = DriverManager.getConnection(url);
 
         } catch (Exception E) {
             return false;
