@@ -99,6 +99,8 @@ public class DBWrapper implements DB {
     @Override
     public void populate() {
         try {
+            this.makeConnection();
+
             String insertString =  "INSERT INTO patients (patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
                     "VALUES (?, ?,  ?, ?, ?, ?, ?)";
             PreparedStatement insertPatient = con.prepareStatement(insertString);
@@ -127,11 +129,12 @@ public class DBWrapper implements DB {
             insertGP.setString(4,"");
             insertGP.setString(5,"");
             insertGP.executeUpdate();
-            this.closeConnection();
 
         } catch (SQLException e) {
             System.out.println("DATABSE COULDNT POPULATE ANYTHING");
             System.out.println(Arrays.toString(e.getStackTrace()));
+        } finally {
+            this.closeConnection();
         }
     }
 
