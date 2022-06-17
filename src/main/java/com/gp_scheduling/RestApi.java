@@ -18,11 +18,8 @@ public class RestApi {
     LogicFunctions logic = new LogicFunctions(db);
 
     @GetMapping("/api/test")
-    public List<Test> test() {
-        List<Test> a = new ArrayList<>();
-        a.add(new Test("msg1 lool", 11));
-        a.add(new Test("msg2 loooool", 123132));
-        return a;
+    public String test() {
+        return "TEST";
     }
 
     @GetMapping("/api/waitlist")
