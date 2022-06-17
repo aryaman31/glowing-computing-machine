@@ -17,6 +17,8 @@ public interface DB {
     public Connection getConnection();
 
 
+    public List<Appt> getAllAppts(int patientId);
+
     public List<Appt> getWaitList(Timestamp time, int gpId);
 
     // Gets a list of partially complete appt objects (not on db) upon calling, representing potential appointments.

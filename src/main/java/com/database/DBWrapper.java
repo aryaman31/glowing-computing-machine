@@ -1,10 +1,7 @@
 package com.database;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class DBWrapper implements DB {
 
@@ -343,6 +340,29 @@ public class DBWrapper implements DB {
     @Override
     public Connection getConnection() {
         return this.con;
+    }
+
+    @Override
+    public List<Appt> getAllAppts(int patientId) {
+        if (!this.makeConnection()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement apptQuery =
+                    con.prepareStatement("SELECT * FROM appointments WHERE patient_id = ?");
+            apptQuery.setInt(1, patientId);
+            ResultSet appts = apptQuery.executeQuery();
+            List ret = new LinkedList();
+            while (appts.next()) {
+                ret.add(this.getAppt(appts.getTimestamp("start_time"),appts.getInt("gp_id")));
+            }
+            return ret;
+        } catch (SQLException E) {
+            return null;
+        } finally {
+            this.closeConnection();
+        }
     }
 
     public static void main(String[] args) {
