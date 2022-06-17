@@ -3,7 +3,7 @@ import Dialog from './Dialog.jsx'
 import {useState, useRef } from 'react'
 
 
-export default function AppointmentList({ upcomings, setUpcoming }) {
+export default function AppointmentList({ upcomings, setUpcoming, allAppoints, setAllAppoints }) {
 
   const [dialog, setDialog] = useState({
     message:'',
@@ -30,6 +30,8 @@ export default function AppointmentList({ upcomings, setUpcoming }) {
     if (choose) {
       const temp = [...upcomings]
       setUpcoming(temp.filter(elem => elem.id !== idProductRef.current))
+      const temp2 = [...allAppoints]
+      setAllAppoints(temp2.filter(elem => elem.id !== idProductRef.current))
       handleDialog('', false)
     } else {
       handleDialog('', false)

@@ -42,7 +42,11 @@ function App() {
 
             <Route path="/view" 
               element={
-                <ViewAppointmentPage upcomings={upcomings} setUpcoming={setUpcoming} />
+                <ViewAppointmentPage 
+                  upcomings={upcomings} 
+                  setUpcoming={setUpcoming}
+                  allAppoints={allAppoints} 
+                  setAllAppoints={setAllAppoints} />
               }
             />
 

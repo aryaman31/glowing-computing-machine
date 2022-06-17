@@ -33,6 +33,23 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
   const [endTime, setEndTime] = useState(new Date())  
   const [hasSelected, setHasSelected] = useState(false)
 
+
+  const slotPropGetter = useCallback((date) => {
+    
+    const d = new Date(date)
+    const s = new Date(startTime)
+    const e = new Date(endTime)
+
+    if (hasSelected && d >= s && d < e) {
+      return ({
+        className: 'slotDefault',
+        
+          style: {
+            backgroundColor: 'grey',
+          },    
+      }) 
+    } 
+  }, [startTime, endTime, hasSelected])
   
 
   function handleSelectSlot({start, end}) {
@@ -143,7 +160,8 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
         onSelectSlot={handleSelectSlot}
         selectable
         onSelecting={() => false}
-        style={{ height: 400, width: 550, margin: "50px" }}
+        style={{ height: 400, width: 550, margin: "25px" }}
+        slotPropGetter={slotPropGetter}
       />
     </div>
 

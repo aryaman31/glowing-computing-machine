@@ -3,7 +3,7 @@ import AppointmentList from './AppointmentList'
 import { Link } from 'react-router-dom'
 import PreviousAppointments from './PreviousAppointments'
 
-export default function ViewAppointmentPage({ upcomings, setUpcoming }) {
+export default function ViewAppointmentPage({ upcomings, setUpcoming, allAppoints, setAllAppoints }) {
 
   const placeholder = {id: 1, 
     doctor: "Dr Phil",
@@ -17,7 +17,11 @@ export default function ViewAppointmentPage({ upcomings, setUpcoming }) {
       
       <div>
       <p style={{fontWeight: 'bold'}}>Upcoming appointments:</p>
-        <AppointmentList upcomings={upcomings} setUpcoming={setUpcoming} />
+        <AppointmentList 
+          upcomings={upcomings} 
+          setUpcoming={setUpcoming}
+          allAppoints={allAppoints} 
+          setAllAppoints={setAllAppoints} />
       </div>
 
       <br/>
