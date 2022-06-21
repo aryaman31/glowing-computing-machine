@@ -7,6 +7,7 @@ public class DBWrapper implements DB {
 
     Connection con = null;
     String dburl = System.getenv("JDBC_DATABASE_URL");
+    public static int slot_length = 15 * 60 * 1000;
 
     @Override
     public boolean setup() {
@@ -69,10 +70,24 @@ public class DBWrapper implements DB {
                             "CONSTRAINT patient_key FOREIGN KEY(patient_id) REFERENCES patients(patient_id)" +
                             ")";
 
+            String createBookingRequests =
+                    "CREATE TABLE IF NOT EXISTS booking_requests (" +
+                        "patient_id bigint," +
+                        "gp_id bigint," +
+                        "start_times timestamp[]," +
+                        "subject varchar(50)," +
+                        "appt_file bigint," + // Files numerically produced representing appt, path should be known before
+                        "booking_requests_key SERIAL PRIMARY KEY," +
+                        "request_time timestamp, " +
+                        "CONSTRAINT patient_key FOREIGN KEY(patient_id) REFERENCES patients(patient_id)," +
+                        "CONSTRAINT gp_key FOREIGN KEY(gp_id) REFERENCES gps(gp_id)" +
+                        ")";
+
             PreparedStatement createPatientsS = con.prepareStatement(createPatients);
             PreparedStatement createGPsS = con.prepareStatement(createGPs);
             PreparedStatement createRecordsS = con.prepareStatement(createRecords);
             PreparedStatement createWaitListS = con.prepareStatement(createWaitList);
+            PreparedStatement createBookingRequestsS = con.prepareStatement(createBookingRequests);
             createPatientsS.execute();
             createPatientsS.close();
 
@@ -84,6 +99,9 @@ public class DBWrapper implements DB {
 
             createWaitListS.execute();
             createWaitListS.close();
+
+            createBookingRequestsS.execute();
+            createBookingRequestsS.close();
 
             con.close();
         } catch (SQLException | ClassNotFoundException e) {
@@ -233,6 +251,43 @@ public class DBWrapper implements DB {
     }
 
     @Override
+    public List<Appt> getBookingRequests(Timestamp timeslot, int gpId) {
+
+        if (!this.makeConnection()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement apptQuery = con.prepareStatement(
+                    "SELECT * FROM booking_requests WHERE ? in start_times AND gp_id = ? ORDER BY request_time ASC");
+            apptQuery.setTimestamp(1, timeslot);
+            apptQuery.setInt(2, gpId);
+            ResultSet apptResult = apptQuery.executeQuery();
+            List<Appt> toReturn = new LinkedList<>();
+            while (apptResult.next()) {
+                Appt appt =
+                        new Appt(
+                                apptResult.getInt("patient_id"),
+                                apptResult.getInt("gp_id"),
+                                timeslot,
+                                new Timestamp(timeslot.getTime() + slot_length),
+                                apptResult.getString("subject"),
+                                apptResult.getInt("appt_file"),
+                                false
+                        );
+                appt.db = this;
+                toReturn.add(appt);
+            }
+            return toReturn;
+        } catch (SQLException E) {
+            return null;
+        } finally {
+            this.makeConnection();
+        }
+
+    }
+
+    @Override
     public int getNumGPAppointments(int gpId, Timestamp current_time, Timestamp start_time) {
         // Returns number of appointments for Database.GP between current time and start_time
 
@@ -242,10 +297,8 @@ public class DBWrapper implements DB {
 
         try {
             PreparedStatement apptQuery =
-                    con.prepareStatement("SELECT * FROM appointments WHERE gp_id = ? AND ? < start_time AND ? >= end_time");
+                    con.prepareStatement("SELECT * FROM appointments WHERE gp_id = ? AND cancelled = false");
             apptQuery.setInt(1, gpId);
-            apptQuery.setTimestamp(2, current_time);
-            apptQuery.setTimestamp(3, start_time);
             ResultSet gpAppts = apptQuery.executeQuery();
             if (!gpAppts.next()) {
                 return 0;
@@ -258,6 +311,30 @@ public class DBWrapper implements DB {
         } finally {
             this.closeConnection();
         }
+    }
+
+    @Override
+    public boolean markAppointment(int gp_id, Timestamp timeStamp) {
+
+
+        if (!this.makeConnection()) {
+            return false;
+        }
+
+        try {
+            PreparedStatement apptQuery =
+                    con.prepareStatement("UPDATE appointments SET cancelled = true WHERE gp_id = ? AND ? = start_time");
+            apptQuery.setInt(1, gp_id);
+            apptQuery.setTimestamp(2, timeStamp);
+            apptQuery.executeUpdate();
+            return true;
+        } catch (SQLException E) {
+            return false;
+        } finally {
+            this.closeConnection();
+        }
+
+
     }
 
     @Override
@@ -295,6 +372,72 @@ public class DBWrapper implements DB {
         } finally {
             this.closeConnection();
         }
+    }
+
+    @Override
+    public boolean addToWaitList(Timestamp time, int gpId, Appt appt) {
+
+        //TODO
+        return false;
+    }
+
+    @Override
+    public boolean adjustRequestsTable(Appt appt) {
+
+        /** Role :
+         *  - Removes appropriate booking request row               x
+         *  - Removes booking request timeslots from other rows     x
+         *  - Deletes any now empty booking requests                x
+         *      - notifies those users                              x
+         */
+
+        if (!this.makeConnection()) {
+            return false;
+        }
+
+        try {
+            PreparedStatement removeRequest = con.prepareStatement(
+                    "DELETE * FROM booking_requests WHERE patient_id = ? AND gp_id = ?");
+            removeRequest.setInt(1, appt.getPatient_id());
+            removeRequest.setInt(2, appt.getGp_id());
+            removeRequest.executeUpdate();
+            PreparedStatement getAffected = con.prepareStatement(
+                    "SELECT * FROM boooking_requests WHERE ? IN start_times AND gp_id = ?"
+            );
+            PreparedStatement adjustStartTimes = con.prepareStatement(
+                    "UPDATE booking_requests SET start_times = ? WHERE patient_id = ? AND gp_id = ?"
+            );
+            ResultSet affected = getAffected.executeQuery();
+            while (affected.next()) {
+                Timestamp[] remaining_times = (Timestamp[]) affected.getArray("start_times").getArray();
+                if (remaining_times.length == 1) {
+                    removeRequest.setInt(1,affected.getInt("patient_id"));
+                    removeRequest.setInt(2,affected.getInt("gp_id"));
+                    removeRequest.executeUpdate();
+                    this.notify(affected.getInt("patient_id"),new Appt(-1,-1,null,null,null,-1,false));
+                } else {
+                    List<Timestamp> param = Arrays.asList((Timestamp[]) affected.getArray("start_times").getArray());
+                    param.remove(appt.getStart_time());
+                    adjustStartTimes.setArray(1,con.createArrayOf("timestamp", param.toArray()));
+                    adjustStartTimes.setInt(2,affected.getInt("patient_id"));
+                    adjustStartTimes.setInt(3,affected.getInt("gp_id"));
+                    adjustStartTimes.executeUpdate();
+                }
+            }
+            return true;
+        } catch (SQLException E) {
+            return false;
+        } finally {
+            this.closeConnection();
+        }
+
+
+    }
+
+    @Override
+    public boolean notify(int id, Appt appt) {
+        // TODO
+        return false;
     }
 
     @Override
