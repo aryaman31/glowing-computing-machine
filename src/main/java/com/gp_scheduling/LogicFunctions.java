@@ -9,6 +9,10 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.*;
 
 public class LogicFunctions {
 
@@ -78,27 +82,46 @@ public class LogicFunctions {
         }
     }
 
+    public static boolean sendEmail(String to, String subject, String msg) {
+        String host = "smtp-relay.gmail.com";
+        String port = "587";
+        String user = "drp26.bookings@gmail.com";
+        String password = "rwortzktwxwigedu";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
+        // props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "*");
+
+        Session session = Session.getDefaultInstance(props,    
+            new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {  
+                    return new PasswordAuthentication(user,password);  
+                }  
+            });
+        
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setText(msg);
+
+            Transport.send(message);
+            System.out.println("Message sent succesfully");
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         // For testing
-        DB db = new DBWrapper();
-        db.setup();
-        db.populate();
-        LogicFunctions lf = new LogicFunctions(db);
-        Appt soreThroat = new Appt(1, 111,
-                lf.getTimeStamp("2022/06/16 21:00"), lf.getTimeStamp("2022/06/16 21:15"),
-                "Sore Throat", -1, false);
-        Appt rash = new Appt(2, 111,
-                lf.getTimeStamp("2022/06/16 21:15"), lf.getTimeStamp("2022/06/16 21:30"),
-                "Rash", -1, false);
-        lf.bookAppt(soreThroat);
-        lf.bookAppt(rash);
-
-        lf.rescheduleAppt(soreThroat,lf.getTimeStamp("2023/06/16 21:30"),lf.getTimeStamp("2023/06/16 21:45"));
-        lf.cancelAppt(rash);
-        rash.setStart_time(lf.getTimeStamp("2023/06/16 21:30"));
-        rash.setEnd_time(lf.getTimeStamp("2023/06/16 21:45"));
-        lf.bookAppt(rash);
-
+        LogicFunctions.sendEmail("aryamanarora31@gmail.com", "TEST EMAIL", "wazzup");
     }
 
 }

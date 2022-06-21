@@ -30,7 +30,7 @@ public interface DB {
 
     public int getNumGPAppointments(int gpId, Timestamp currentTime, Timestamp start_time);
 
-    public boolean sendEmail(String email, String subject, String msg);
+    // public boolean sendEmail(String email, String subject, String msg);
 
     public void populate();
 }
