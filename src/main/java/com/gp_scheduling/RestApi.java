@@ -116,13 +116,3 @@ public class RestApi {
 
 
 }
-
-class Test {
-    String msg;
-    int i;
-
-    public Test(String mString, int i) {
-        this.msg = mString;
-        this.i = i;
-    }
-}
