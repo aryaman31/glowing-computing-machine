@@ -8,6 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.*;
 
 public class LogicFunctions {
 
@@ -100,24 +104,39 @@ public class LogicFunctions {
         }
     }
 
-    public static void main(String[] args) {
-        // For testing
-        DB db = new DBWrapper();
-        db.setup();
-        db.populate();
-        LogicFunctions lf = new LogicFunctions(db);
-        BookingRequest soreThroat = new BookingRequest(1, 111,
-                List.of(lf.getTimeStamp("\"2022/06/16 21:00\"")), lf.getTimeStamp("\"2022/05/16 21:15\""),
-                "Sore Throat", "Persistent sore throat");
-        BookingRequest rash = new BookingRequest(2, 111,
-                List.of(lf.getTimeStamp("\"2022/06/16 21:00\"\"2022/06/16 21:00\"")), lf.getTimeStamp("\"2022/05/16 21:30\""),
-                "Rash", "Rash covering entire body");
+    public boolean sendEmail(String to, String subject, String msg) {
+        String host = "smtp.gmail.com";
+        String port = "587";
+        String user = "drp26.bookings@gmail.com";
+        String password = "rwortzktwxwigedu";
 
-        lf.requestAppt(soreThroat);
-        lf.requestAppt(rash);
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "*");
 
-        lf.bookAppt(new Appt(soreThroat,lf.getTimeStamp("\"2022/06/16 21:00\"\"2022/06/16 21:00\"")));
+        Session session = Session.getDefaultInstance(props,    
+            new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {  
+                    return new PasswordAuthentication(user,password);  
+                }  
+            });
+        
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setText(msg);
 
-    }
-
+            Transport.send(message);
+            System.out.println("Message sent succesfully");
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }   
 }

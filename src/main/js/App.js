@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Home';
 import BookAppointmentPage from './BookAppointmentPage';
+import BookPageOne from './BookPageOne';
+import BookPageTwo from './BookPageTwo.js';
+import BookPageThree from './BookPageThree.js';
 import ViewAppointmentPage from './ViewAppointmentPage';
 import YourAppointmentPage from './YourAppointmentPage';
 import AppointmentNote from './AppointmentNote';
@@ -28,6 +31,11 @@ function App() {
 
   // patients choosing doctors
   const [doctor, setDoctor] = useState()
+
+
+  const [problem, setProblem] = useState()
+
+  const [description, setDescription] = useState()
 
 
   // useEffect(() => {
@@ -70,6 +78,7 @@ function App() {
         <div className='content'>
           <Routes>
 
+
             <Route path="/" element = {<AdminOrPatient/>} />
 
             <Route path="/admin_login" element = {<AdminLogin adminName={adminName} setAdminName={setAdminName}/>} />
@@ -84,6 +93,25 @@ function App() {
 
 
             <Route path="/home" element={<Home name={name}/>}/>
+
+            // first booking page
+            <Route path="/book_appointment" element={<BookPageOne name={name}/>} />
+            // second booking page
+            <Route path="/appointment_details" element={<BookPageTwo name={name} setProblem={setProblem} setDescription={setDescription}/>} />
+            // third booking page
+            <Route path="/appointment_slot"
+            element={
+              <BookPageThree 
+                setUpcoming={setUpcoming} 
+                name={name} 
+                allAppoints={allAppoints} 
+                setAllAppoints={setAllAppoints} 
+                doctor={doctor}
+                setDoctor={setDoctor}
+                problem={problem}
+                description={description}
+                 />              
+            } />
 
             <Route path="/bookings" 
               element={
