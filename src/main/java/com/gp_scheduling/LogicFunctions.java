@@ -34,6 +34,10 @@ public class LogicFunctions {
 
         if (noClashingAppts(appt)) {
             db.adjustRequestsTable(appt); // Implements lower 3
+            GP gp = db.getGP(appt.getGp_id());
+            db.notify(db.getPatient(appt.getPatient_id()).getEmail(),
+                    "You have been booked in for an appointment with Dr. "+
+                            gp.getFirst_name() + " "+gp.getSurname()+ " at "+appt.getStart_time().toString()+".");
             return appt.save(db);
         } else {
             return false;

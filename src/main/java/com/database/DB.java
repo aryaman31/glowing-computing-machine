@@ -35,12 +35,12 @@ public interface DB {
 
     public int getNumGPAppointments(int gpId, Timestamp currentTime, Timestamp start_time);
 
-    public boolean markAppointment(int gp_id, Timestamp timeStamp);
+    public boolean markAppointment(int gp_id, Timestamp timeStamp, String notes);
 
     public void populate();
 
     boolean adjustRequestsTable(Appt appt);
 
-    public boolean notifyRequestFailure(int id, String subject);
+    public boolean notify(String email, String message);
 
 }

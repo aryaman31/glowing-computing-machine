@@ -24,32 +24,51 @@ public class RestApi {
 
     @GetMapping("/api/waitlist")
     public List<Appt> gWList(@RequestParam(name = "time") Timestamp time, @RequestParam(name = "id") int id) {
+        /**
+         * Gets the waitlist from the database given a time slot and a gp ID
+         */
         return db.getWaitList(time, id);
     }
 
     @GetMapping("/api/patient")
     public Patient gPatient(@RequestParam(name = "id") int id) {
+        /**
+         * gets patient data given their ID
+         */
         return db.getPatient(id);
     }
 
     @GetMapping("/api/gp")
     public GP ggp(@RequestParam(name = "id") int id) {
+        /**
+         * Returns GP data given their ID
+         */
         return db.getGP(id);
     }
 
     @GetMapping("/api/appt")
     public Appt getappt(@RequestParam(name = "startTime") String start, @RequestParam(name = "id") int id) {
+        /**
+         * Returns an appointment given a time slot and a gp id
+         */
         return db.getAppt(logic.getTimeStamp(start), id);
     }
 
     @GetMapping("/api/getAppts")
-    public List<Appt> getAppts(@RequestParam int id) {
+    public List<Appt> getAppts(@RequestParam(name = "id") int id) {
+        /**
+         * Gets a list of all appointments for a particular GP, given a gps id
+         */
         return db.getAllAppts(id);
     }
 
     @GetMapping("/api/numGpAppt")
     public int getNumGPAppointments(@RequestParam(name = "id") int id, @RequestParam(name = "currTime") String currTimestamp,
                                     @RequestParam(name = "startTime") String sTimestamp) {
+        /**
+         * Gets the number of uncompleted appointments for a given gp (provided by id in "id") until a
+         * particular start time "start time"
+         */
         return db.getNumGPAppointments(id, logic.getTimeStamp(currTimestamp), logic.getTimeStamp(sTimestamp));
     }
 
@@ -59,6 +78,14 @@ public class RestApi {
                                    @RequestParam(name = "start_times") String[] start_times,
                                    @RequestParam(name = "subject") String subject,
                                    @RequestParam(name = "appt_details") String appt_details) {
+        /**
+         * patient_id: ID of the patient requesting the booking
+         * gp_id: ID of the gp that the patient is booking for
+         * start_times: A list of Strings representing the time slots the patient is willing to accept
+         * subject: a short string representing the subject of the appointment
+         * appt_details: Field for long form text details of the appointment (type etc.)
+         * Adds a booking to the request table, that can be provided to an administrator page
+         */
          return logic.requestAppt(new BookingRequest(patient_id,gp_id,
                  Arrays.stream(start_times).map(x -> logic.getTimeStamp(x)).collect(Collectors.toList()),
                  new Timestamp(System.currentTimeMillis()),subject,appt_details));
@@ -67,22 +94,26 @@ public class RestApi {
     @GetMapping("/api/reschedule")
     public boolean reschedule(@RequestParam(name = "original_start") String original_start,
                                        @RequestParam(name = "gp_id") int gp_id,
-                                       @RequestParam(name = "new_start") String new_start,
-                                       @RequestParam(name = "new_end") String new_end)
+                                       @RequestParam(name = "new_start") String new_start)
     {
-
+        /**
+         * Should only be available to administrators
+         * Takes in the original start time, the gp it's with, and a new start time and cancels the original booking while making a new one
+         */
         Appt initial = db.getAppt(logic.getTimeStamp(original_start),gp_id);
 
-        return logic.rescheduleAppt(initial,logic.getTimeStamp(new_start),logic.getTimeStamp(new_end));
+        return logic.rescheduleAppt(initial,logic.getTimeStamp(new_start),LogicFunctions.getEndTime(logic.getTimeStamp(new_start)));
 
     }
 
     @GetMapping("/api/cancelAppt")
     public boolean cancelAppt(@RequestParam(name = "original_start") String original_start,
                               @RequestParam(name = "gp_id") int gp_id,
-                              @RequestParam(name = "new_start") String new_start,
-                              @RequestParam(name = "new_end") String new_end)
+                              @RequestParam(name = "new_start") String new_start)
     {
+        /**
+         * cancels appointment, identifying the appointment using the original start time and gp id
+         */
         Appt initial = db.getAppt(logic.getTimeStamp(original_start),gp_id);
         return logic.cancelAppt(initial);
 
@@ -92,6 +123,10 @@ public class RestApi {
     public List<Appt> bookingRequests(@RequestParam(name = "start_time") String start_time,
                                    @RequestParam(name = "gp_id") int gp_id)
     {
+        /**
+         * Given a slot time (start_time) and a gp_id returns all requested appointments
+         * For that slot for that gp
+         */
         return db.getBookingRequests(logic.getTimeStamp(start_time),gp_id);
     }
 
@@ -102,16 +137,22 @@ public class RestApi {
                                        @RequestParam(name = "end_time") String end_time,
                                        @RequestParam(name = "subject") String subject,
                                        @RequestParam(name = "appt_details") String appt_details) {
-
+        /**
+         * Function to call when an admin decides which booking to actually put through
+         */
         return logic.bookAppt(new Appt(patient_id,gp_id,logic.getTimeStamp(start_time),
-                logic.getTimeStamp(end_time),subject,appt_details,false));
+                LogicFunctions.getEndTime(logic.getTimeStamp(start_time)),subject,appt_details,false));
     }
 
     @GetMapping("/api/markAppointmentComplete")
     public boolean markAppointment(@RequestParam(name = "gp_id") int gp_id,
-                                   @RequestParam(name = "start_time") String start_time)
+                                   @RequestParam(name = "start_time") String start_time,
+                                   @RequestParam(name = "notes") String notes)
     {
-        return db.markAppointment(gp_id,logic.getTimeStamp(start_time));
+        /**
+         * Function to call when a booking has been marked complete. Adds notes to the database appointment record
+         */
+        return db.markAppointment(gp_id,logic.getTimeStamp(start_time),notes);
     }
 
 
