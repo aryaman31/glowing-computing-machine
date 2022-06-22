@@ -76,7 +76,7 @@ function App() {
 
             <Route path="/admin_home" element={<AdminHome adminName={adminName}/>} />
 
-            <Route path="/patient_booking_requests" element={<PatientBookingRequests/>} />
+            <Route path="/patient_booking_requests" element={<PatientBookingRequests allAppoints={allAppoints}/>} />
 
 
             // removed setPatientId=...
@@ -115,7 +115,6 @@ function App() {
                 <YourAppointmentPage upcomings={upcomings} />
               }
             />
-
 
             <Route path="/note" 
               element={
