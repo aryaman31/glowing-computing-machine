@@ -8,7 +8,7 @@ import java.util.*;
 public class DBWrapper implements DB {
 
     Connection con = null;
-    private boolean localDebug = true;
+    private boolean localDebug = false;
     String dburl = localDebug ? "jdbc:postgresql://localhost:5432/main" : System.getenv("JDBC_DATABASE_URL");
     // db is contained in a url - identified by : jdbc:postgresql://host:post/com.database locally,
     // else user System.getenv
