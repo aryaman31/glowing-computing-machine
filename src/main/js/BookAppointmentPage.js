@@ -139,7 +139,6 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
 
     <hr/>
 
-
     
     <h2> Step 1: Please consider whether your condition is appropriate to see a GP </h2>
 

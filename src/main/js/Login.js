@@ -35,7 +35,7 @@ export default function Login({ name, setName }) {
                 <label>Password</label>
                 <input
                 id="password"
-                type="text"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 />
