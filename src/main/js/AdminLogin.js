@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export default function AdminLogin({ adminName, setAdminName }) {
 
@@ -43,15 +44,12 @@ export default function AdminLogin({ adminName, setAdminName }) {
 
           <button type="submit">Submit</button>
 
+          <Link to="/">
+            <button>Back</button>
+          </Link>
+
       </form>
-{/* 
-      <div className='options'>
 
-        <Link to="/">
-        <button>Back</button>
-        </Link>
-
-        </div> */}
     </>
 
     

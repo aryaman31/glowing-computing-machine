@@ -23,7 +23,7 @@ export default function Home({ name }) {
 
           <br/>
 
-          <Link to="/">
+          <Link to="/patient_login">
             <button>Log out</button>
           </Link>
 

@@ -7,7 +7,7 @@ export default function PatientAppointment({ appoint }) {
     <p>Patient name: {appoint.name}</p>
     <p>Problem faced: {appoint.problem}</p>
     <p>Description:</p>
-    <p>{appoint.description.split('\n').map(str => <p>{str}</p>)}</p>
+    {appoint.description.split('\n').map(str => <p>{str}</p>)}
 
     </>
   )

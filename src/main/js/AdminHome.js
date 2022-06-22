@@ -16,15 +16,12 @@ export default function AdminHome( {adminName}) {
 
           <br/>
 
-      <Link to="/admin_login">
-        <button>Back</button>
-      </Link>
+          <Link to="/admin_login">
+            <button>Log out</button>
+          </Link>
 
-      <br/>
+          <br/>
 
-<Link to="/">
-  <button>Log out</button>
-</Link>
 
 
         </div>

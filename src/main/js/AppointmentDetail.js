@@ -21,7 +21,7 @@ export default function AppointmentDetail({ appoint }) {
         
         <div>
           <h3>Description:</h3>
-          <p>{appoint.description.split('\n').map(str => <p>{str}</p>)}</p>
+          {appoint.description.split('\n').map(str => <p>{str}</p>)}
         </div>
         
       </div>

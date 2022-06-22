@@ -1,42 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Views, dateFnsLocalizer } from 'react-big-calendar'
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay"
+import { Calendar, Views } from 'react-big-calendar'
 import "./react-big-calendar.css"
 import PatientAppointment from './PatientAppointment';
+import { localizer } from './BookPageThree';
 
-const locales = {
-  "en-GB": require("date-fns/locale/en-GB")
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales
-});
-
-export default function PatientBookingRequests({ allAppoints }) {
+export default function PatientBookingRequests({ allAppoints, displayAppoints }) {
 
   const [thisDaySlots, setThisDaySlots] = useState([])
   const [currDoctor, setCurrDoctor] = useState("")
   const [doctorSlots, setDoctorSlots] = useState([])
-  const [confirmedSlot, setConfirmedSlot] = useState()
 
 
   function handleDoctorSelection(e) {
-    console.log({currDoctor})
+    console.log(displayAppoints)
     setCurrDoctor(e.target.value)
   }
 
 
   useEffect(() => {
     console.log({currDoctor})
-    const temp = [...allAppoints]
+    const temp = [...displayAppoints]
     const res = temp.filter(elem => elem.doctor === currDoctor)
     setDoctorSlots(res)
   }, [currDoctor])
@@ -45,7 +29,8 @@ export default function PatientBookingRequests({ allAppoints }) {
   function handleSelectEvent(e) {
     
     const temp = [...allAppoints]
-    const thisSlotApppoints = temp.filter(elem => elem.start === e.start && elem.doctor === currDoctor)
+    console.log(e.start)
+    const thisSlotApppoints = temp.filter(elem => elem.start.getTime() === e.start.getTime() && elem.doctor === currDoctor)
     setThisDaySlots(thisSlotApppoints)
   }
 
@@ -88,11 +73,6 @@ export default function PatientBookingRequests({ allAppoints }) {
           />
         </div>
 
-        {confirmedSlot && <div>
-          <h3>Confirmed appointment for slot:</h3>
-          <PatientAppointment appoint={confirmedSlot}/>
-        </div>}
-
         <hr/>
 
 
@@ -101,13 +81,11 @@ export default function PatientBookingRequests({ allAppoints }) {
         <div className='currSlotAppointments'>
           {thisDaySlots.map(a => {
             return (
-              <>
               <div key={a.id}>
                 <PatientAppointment appoint={a}/>
-                <button onClick={(e) => {setConfirmedSlot(a)}}>Send confirmation</button>
+                <button>Send confirmation</button>
+                <hr/>
               </div>
-              <hr/>
-              </>
             )
           })}
           
