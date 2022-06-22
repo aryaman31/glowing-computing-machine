@@ -82,7 +82,7 @@ public class LogicFunctions {
         }
     }
 
-    public static boolean sendEmail(String to, String subject, String msg) {
+    public boolean sendEmail(String to, String subject, String msg) {
         String host = "smtp.gmail.com";
         String port = "587";
         String user = "drp26.bookings@gmail.com";
@@ -120,7 +120,7 @@ public class LogicFunctions {
 
     public static void main(String[] args) {
         // For testing
-        LogicFunctions.sendEmail("aryamanarora31@gmail.com", "TEST EMAIL", "wazzup");
+        // LogicFunctions.sendEmail("aryamanarora31@gmail.com", "TEST EMAIL", "wazzup");
     }
 
 }
