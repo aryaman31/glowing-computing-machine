@@ -161,6 +161,8 @@ export default function BookPageThree({ setUpcoming, name,
             onSelecting={() => false}
             style={{ height: 400, width: 550, margin: "25px" }}
             slotPropGetter={slotPropGetter}
+            min={new Date(2022, 0, 0, 8, 0, 0)}
+            max={new Date(2022, 0, 0, 20, 0, 0)}
           />
         </div>
 

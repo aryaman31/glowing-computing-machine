@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
+// import javax.mail.*;
+// import javax.mail.internet.*;
 
 public class LogicFunctions {
 
@@ -104,39 +104,39 @@ public class LogicFunctions {
         }
     }
 
-    public boolean sendEmail(String to, String subject, String msg) {
-        String host = "smtp.gmail.com";
-        String port = "587";
-        String user = "drp26.bookings@gmail.com";
-        String password = "rwortzktwxwigedu";
+    // public boolean sendEmail(String to, String subject, String msg) {
+    //     String host = "smtp.gmail.com";
+    //     String port = "587";
+    //     String user = "drp26.bookings@gmail.com";
+    //     String password = "rwortzktwxwigedu";
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", port);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.trust", "*");
+    //     Properties props = new Properties();
+    //     props.put("mail.smtp.host", host);
+    //     props.put("mail.smtp.port", port);
+    //     props.put("mail.smtp.auth", "true");
+    //     props.put("mail.smtp.starttls.enable", "true");
+    //     props.put("mail.smtp.ssl.trust", "*");
 
-        Session session = Session.getDefaultInstance(props,    
-            new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {  
-                    return new PasswordAuthentication(user,password);  
-                }  
-            });
+    //     Session session = Session.getDefaultInstance(props,    
+    //         new javax.mail.Authenticator() {
+    //             protected PasswordAuthentication getPasswordAuthentication() {  
+    //                 return new PasswordAuthentication(user,password);  
+    //             }  
+    //         });
         
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setText(msg);
+    //     try {
+    //         MimeMessage message = new MimeMessage(session);
+    //         message.setFrom(new InternetAddress(user));
+    //         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+    //         message.setSubject(subject);
+    //         message.setText(msg);
 
-            Transport.send(message);
-            System.out.println("Message sent succesfully");
-            return true;
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }   
+    //         Transport.send(message);
+    //         System.out.println("Message sent succesfully");
+    //         return true;
+    //     } catch (MessagingException e) {
+    //         e.printStackTrace();
+    //         return false;
+    //     }
+    // }   
 }
