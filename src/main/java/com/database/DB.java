@@ -26,6 +26,7 @@ public interface DB {
     // Gets a list of partially complete appt objects (not on db) upon calling, representing potential appointments.
 
     public Patient getPatient(int patientId);
+
     public GP getGP(int gpId);
 
     public Appt getAppt(Timestamp startTime, int gpId);
@@ -40,5 +41,6 @@ public interface DB {
 
     boolean adjustRequestsTable(Appt appt);
 
-    public boolean notify(int id, Appt appt);
+    public boolean notifyRequestFailure(int id, String subject);
+
 }

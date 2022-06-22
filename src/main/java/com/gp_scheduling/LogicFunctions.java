@@ -1,13 +1,12 @@
 package com.gp_scheduling;
 
-import com.database.Appt;
-import com.database.DB;
-import com.database.DBWrapper;
-import com.database.Patient;
+import com.database.*;
 
+import java.awt.print.Book;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LogicFunctions {
@@ -18,18 +17,37 @@ public class LogicFunctions {
         this.db = db;
     }
 
+    public static int slot_length = 15 * 60 * 1000;
+    public static Timestamp getEndTime(Timestamp start_time) {
+        return new Timestamp(start_time.getTime()+slot_length);
+    }
+
     public boolean bookAppt(Appt appt) {
+
+        /** Role :
+         *  - Checks no clashing bookings                           x
+         *  - Removes a booking request row                         x
+         *  - Removes booking request timeslots from other rows     x
+         *  - Deletes any now empty booking requests                x
+         *      - notifies those users                              x
+        */
+
         if (noClashingAppts(appt)) {
+            db.adjustRequestsTable(appt); // Implements lower 3
             return appt.save(db);
         } else {
             return false;
         }
     }
 
+    public boolean requestAppt(BookingRequest request) {
+        return request.save(this.db);
+    }
+
     public boolean rescheduleAppt(Appt initAppt, Timestamp newTime,Timestamp newEnd) {
 
         boolean success = this.bookAppt(new Appt(initAppt.getPatient_id(),initAppt.getGp_id(),newTime,newEnd,
-                initAppt.getSubject(),initAppt.getAppt_file(),false));
+                initAppt.getSubject(),initAppt.getAppt_details(),false));
         if (success) {
             this.cancelAppt(initAppt);
         } else {
@@ -65,7 +83,7 @@ public class LogicFunctions {
 
     private void notify(Patient patient, Appt template) {
         // TODO
-        int i = -1;
+        System.out.println("Notified Patient "+Integer.toString(patient.getPatient_id()));
     }
 
     public Timestamp getTimeStamp(String dateTime) {
@@ -84,20 +102,17 @@ public class LogicFunctions {
         db.setup();
         db.populate();
         LogicFunctions lf = new LogicFunctions(db);
-        Appt soreThroat = new Appt(1, 111,
-                lf.getTimeStamp("2022/06/16 21:00"), lf.getTimeStamp("2022/06/16 21:15"),
-                "Sore Throat", -1, false);
-        Appt rash = new Appt(2, 111,
-                lf.getTimeStamp("2022/06/16 21:15"), lf.getTimeStamp("2022/06/16 21:30"),
-                "Rash", -1, false);
-        lf.bookAppt(soreThroat);
-        lf.bookAppt(rash);
+        BookingRequest soreThroat = new BookingRequest(1, 111,
+                List.of(lf.getTimeStamp("\"2022/06/16 21:00\"")), lf.getTimeStamp("\"2022/05/16 21:15\""),
+                "Sore Throat", "Persistent sore throat");
+        BookingRequest rash = new BookingRequest(2, 111,
+                List.of(lf.getTimeStamp("\"2022/06/16 21:00\"\"2022/06/16 21:00\"")), lf.getTimeStamp("\"2022/05/16 21:30\""),
+                "Rash", "Rash covering entire body");
 
-        lf.rescheduleAppt(soreThroat,lf.getTimeStamp("2023/06/16 21:30"),lf.getTimeStamp("2023/06/16 21:45"));
-        lf.cancelAppt(rash);
-        rash.setStart_time(lf.getTimeStamp("2023/06/16 21:30"));
-        rash.setEnd_time(lf.getTimeStamp("2023/06/16 21:45"));
-        lf.bookAppt(rash);
+        lf.requestAppt(soreThroat);
+        lf.requestAppt(rash);
+
+        lf.bookAppt(new Appt(soreThroat,lf.getTimeStamp("\"2022/06/16 21:00\"\"2022/06/16 21:00\"")));
 
     }
 
