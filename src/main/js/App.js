@@ -29,7 +29,6 @@ function App() {
   // patients choosing doctors
   const [doctor, setDoctor] = useState()
 
-  const doctors = ['Dr Smith', 'Dr Garcia', 'Dr Strange', 'Dr Jones']
 
   // useEffect(() => {
   //   fetch()
@@ -93,9 +92,9 @@ function App() {
                   name={name} 
                   allAppoints={allAppoints} 
                   setAllAppoints={setAllAppoints} 
-                  doctors={doctors}
                   doctor={doctor}
-                  setDoctor={setDoctor} />              
+                  setDoctor={setDoctor}
+                   />              
               }
             />
 
