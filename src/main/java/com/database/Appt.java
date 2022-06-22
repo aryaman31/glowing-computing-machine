@@ -1,7 +1,11 @@
 package com.database;
 
+import com.gp_scheduling.LogicFunctions;
+
+import java.awt.print.Book;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Appt implements Storeable {
@@ -11,25 +15,31 @@ public class Appt implements Storeable {
     private Timestamp start_time;
     private Timestamp end_time;
     private String subject;
-    private int appt_file;
-    private boolean cancelled;
-    // Can only change subject, appt_file. Any other changes handled as creating a new record and then deleting the old one
+    private String appt_details;
+    private boolean completed;
+    // Can only change subject, appt_details. Any other changes handled as creating a new record and then deleting the old one
     boolean[] changed = {false, false};
 
-    public Appt(int patient_id, int gp_id, Timestamp start_time, Timestamp end_time, String subject, int appt_file, boolean cancelled) {
+    public Appt(int patient_id, int gp_id, Timestamp start_time, Timestamp end_time, String subject, String appt_details, boolean completed) {
         this.patient_id = patient_id;
         this.gp_id = gp_id;
         this.start_time = start_time;
         this.end_time = end_time;
         this.subject = subject;
-        this.appt_file = appt_file;
-        this.cancelled = cancelled;
+        this.appt_details = appt_details;
+        this.completed = completed;
     }
 
-    public static Timestamp getEndTimeOnAppt(Timestamp start_time) {
-        // TODO
-        return null;
+    public Appt(BookingRequest request, Timestamp start_time) {
+        this.patient_id = request.getPatient_id();
+        this.gp_id = request.getGp_id();
+        this.start_time = start_time;
+        this.end_time = LogicFunctions.getEndTime(start_time);
+        this.subject = request.getSubject();
+        this.appt_details = request.getAppt_details();
+        this.completed = false;
     }
+
 
     public void setPatient_id(int patient_id) {
         this.patient_id = patient_id;
@@ -51,12 +61,12 @@ public class Appt implements Storeable {
         this.subject = subject;
     }
 
-    public void setAppt_file(int appt_file) {
-        this.appt_file = appt_file;
+    public void setAppt_details(String appt_details) {
+        this.appt_details = appt_details;
     }
 
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setCancelled(boolean completed) {
+        this.completed = completed;
     }
 
     public int getPatient_id() {
@@ -79,12 +89,12 @@ public class Appt implements Storeable {
         return subject;
     }
 
-    public int getAppt_file() {
-        return appt_file;
+    public String getAppt_details() {
+        return appt_details;
     }
 
     public boolean isCancelled() {
-        return cancelled;
+        return completed;
     }
 
     public boolean cancel(DB db) {
@@ -111,7 +121,7 @@ public class Appt implements Storeable {
         db.makeConnection();
         String changeString =
                 "INSERT INTO appointments " +
-                        "(patient_id, gp_id, start_time, end_time, subject, appt_file, cancelled)" +
+                        "(patient_id, gp_id, start_time, end_time, subject, appt_details, completed)" +
                         " VALUES (?, ?, ?, ? , ?, ?, ?)";
         PreparedStatement change;
         try {
@@ -121,12 +131,12 @@ public class Appt implements Storeable {
             change.setTimestamp(3, this.start_time);
             change.setTimestamp(4, new Timestamp(this.start_time.getTime() + 60 * 15 * 1_000));
             change.setString(5,this.subject);
-            change.setInt(6,-1);
+            change.setString(6,this.appt_details);
             change.setBoolean(7,false);
             change.executeUpdate();
 
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            System.out.println(throwables.getStackTrace());
             return false;
         }
         db.closeConnection();

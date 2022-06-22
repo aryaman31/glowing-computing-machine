@@ -21,16 +21,26 @@ public interface DB {
 
     public List<Appt> getWaitList(Timestamp time, int gpId);
 
+    public boolean addToWaitList(Timestamp time, int gpId, Appt appt);
+
     // Gets a list of partially complete appt objects (not on db) upon calling, representing potential appointments.
+
     public Patient getPatient(int patientId);
 
     public GP getGP(int gpId);
 
     public Appt getAppt(Timestamp startTime, int gpId);
 
+    public List<Appt> getBookingRequests(Timestamp timeslo, int gpId);
+
     public int getNumGPAppointments(int gpId, Timestamp currentTime, Timestamp start_time);
 
-    // public boolean sendEmail(String email, String subject, String msg);
+  public boolean markAppointment(int gp_id, Timestamp timeStamp);
 
     public void populate();
+
+    boolean adjustRequestsTable(Appt appt);
+
+    public boolean notifyRequestFailure(int id, String subject);
+
 }

@@ -1,16 +1,16 @@
 package com.gp_scheduling;
 
-import com.database.Appt;
-import com.database.DB;
-import com.database.GP;
-import com.database.Patient;
+import com.database.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class RestApi {
@@ -53,15 +53,15 @@ public class RestApi {
         return db.getNumGPAppointments(id, logic.getTimeStamp(currTimestamp), logic.getTimeStamp(sTimestamp));
     }
 
-    @GetMapping("/api/bookingConfirmation")
-    public boolean bookingConfirmation(@RequestParam(name = "patient_id") int patient_id,
+    @GetMapping("/api/requestBooking") // Rename to request booking
+    public boolean requestBooking(@RequestParam(name = "patient_id") int patient_id,
                                    @RequestParam(name = "gp_id") int gp_id,
-                                   @RequestParam(name = "start_time") String start_time,
-                                   @RequestParam(name = "end_time") String end_time,
-                                   @RequestParam(name = "subject") String subject) {
-        System.out.println("START TIME IS " + start_time);
-        return logic.bookAppt(new Appt(patient_id,gp_id,logic.getTimeStamp(start_time),
-                        logic.getTimeStamp(end_time),subject,-1,false));
+                                   @RequestParam(name = "start_times") String[] start_times,
+                                   @RequestParam(name = "subject") String subject,
+                                   @RequestParam(name = "appt_details") String appt_details) {
+         return logic.requestAppt(new BookingRequest(patient_id,gp_id,
+                 Arrays.stream(start_times).map(x -> logic.getTimeStamp(x)).collect(Collectors.toList()),
+                 new Timestamp(System.currentTimeMillis()),subject,appt_details));
     }
 
     @GetMapping("/api/reschedule")
@@ -87,4 +87,32 @@ public class RestApi {
         return logic.cancelAppt(initial);
 
     }
+
+    @GetMapping("/api/bookingRequests")
+    public List<Appt> bookingRequests(@RequestParam(name = "start_time") String start_time,
+                                   @RequestParam(name = "gp_id") int gp_id)
+    {
+        return db.getBookingRequests(logic.getTimeStamp(start_time),gp_id);
+    }
+
+    @GetMapping("/api/adminSetBooking")
+    public boolean bookingConfirmation(@RequestParam(name = "patient_id") int patient_id,
+                                       @RequestParam(name = "gp_id") int gp_id,
+                                       @RequestParam(name = "start_time") String start_time,
+                                       @RequestParam(name = "end_time") String end_time,
+                                       @RequestParam(name = "subject") String subject,
+                                       @RequestParam(name = "appt_details") String appt_details) {
+
+        return logic.bookAppt(new Appt(patient_id,gp_id,logic.getTimeStamp(start_time),
+                logic.getTimeStamp(end_time),subject,appt_details,false));
+    }
+
+    @GetMapping("/api/markAppointmentComplete")
+    public boolean markAppointment(@RequestParam(name = "gp_id") int gp_id,
+                                   @RequestParam(name = "start_time") String start_time)
+    {
+        return db.markAppointment(gp_id,logic.getTimeStamp(start_time));
+    }
+
+
 }

@@ -86,76 +86,47 @@ public class Patient implements Storeable {
     public boolean save(DB db) {
 
         db.makeConnection();
-        String changeString = "UPDATE patients SET ? = ? WHERE patient_id = ?";
-        PreparedStatement change;
+        String exists = "SELECT * FROM patients WHERE patient_id = ?";
+        PreparedStatement existsS;
+        String addNewRecord = "INSERT INTO patients " +
+                "(patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
+                "VALUES (?, ?,  ?, ?, ?, ?, ?)";
+        PreparedStatement addNewRecordS;
+        String updateRecord = "UPDATE patients\n" +
+                "SET first_name = ?, surname = ?, clinic_id = ?, hospital_id = ?, salted = ?, salt = ? " +
+                "WHERE patient_id = ?";
+        PreparedStatement updateRecordS;
         try {
-            change = db.getConnection().prepareStatement(changeString);
-            change.setInt(3, this.patient_id);
+            existsS = db.getConnection().prepareStatement(exists);
+            existsS.setInt(1, this.patient_id);
+            boolean result = existsS.executeQuery().next();
+            if (result) {
+                updateRecordS = db.getConnection().prepareStatement(updateRecord);
+                updateRecordS.setString(1, this.first_name);
+                updateRecordS.setString(2, this.surname);
+                updateRecordS.setInt(3, this.clinic_id);
+                updateRecordS.setInt(4, this.hospital_id);
+                updateRecordS.setString(5, this.salted);
+                updateRecordS.setString(6, this.salt);
+                updateRecordS.setInt(7, this.patient_id);
+                updateRecordS.executeUpdate();
+            } else {
+                addNewRecordS = db.getConnection().prepareStatement(addNewRecord);
+                addNewRecordS.setInt(1, this.patient_id);
+                addNewRecordS.setString(2, this.first_name);
+                addNewRecordS.setString(3, this.surname);
+                addNewRecordS.setInt(4, this.clinic_id);
+                addNewRecordS.setInt(5, this.hospital_id);
+                addNewRecordS.setString(6, this.salted);
+                addNewRecordS.setString(7, this.salt);
+                addNewRecordS.executeUpdate();
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return false;
         }
-        if (changed[0]) {
-            try {
-                change.setString(1, "first_name");
-                change.setString(2, this.first_name);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[1]) {
-            try {
-                change.setString(1, "surname");
-                change.setString(2, this.surname);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[2]) {
-            try {
-                change.setString(1, "clinic_id");
-                change.setInt(2, this.clinic_id);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[3]) {
-            try {
-                change.setString(1, "hospital_id");
-                change.setInt(2, this.hospital_id);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[4]) {
-            try {
-                change.setString(1, "salted");
-                change.setString(2, this.salted);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        if (changed[5]) {
-            try {
-                change.setString(1, "salt");
-                change.setString(2, this.salt);
-                change.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-        db.closeConnection();
+
         return true;
+
     }
 }

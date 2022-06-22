@@ -13,7 +13,7 @@ export default function YourAppointmentPage({ upcomings }) {
     <>
       <h1>Appointment details</h1>
 
-      <p>TODO: add queue interface for expected wait times</p>
+      {/* <p>TODO: add queue interface for expected wait times</p> */}
 
       <div className='Appointment'>
       <p>---------------------------------------------------------------------</p>
@@ -35,7 +35,7 @@ export default function YourAppointmentPage({ upcomings }) {
         
         <div>
           <h3>Description:</h3>
-          <p>{appoint.description}</p>
+          <p>{appoint.description.split('\n').map(str => <p>{str}</p>)}</p>
         </div>
         
       </div>

@@ -1,13 +1,12 @@
 package com.gp_scheduling;
 
-import com.database.Appt;
-import com.database.DB;
-import com.database.DBWrapper;
-import com.database.Patient;
+import com.database.*;
 
+import java.awt.print.Book;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,18 +21,37 @@ public class LogicFunctions {
         this.db = db;
     }
 
+    public static int slot_length = 15 * 60 * 1000;
+    public static Timestamp getEndTime(Timestamp start_time) {
+        return new Timestamp(start_time.getTime()+slot_length);
+    }
+
     public boolean bookAppt(Appt appt) {
+
+        /** Role :
+         *  - Checks no clashing bookings                           x
+         *  - Removes a booking request row                         x
+         *  - Removes booking request timeslots from other rows     x
+         *  - Deletes any now empty booking requests                x
+         *      - notifies those users                              x
+        */
+
         if (noClashingAppts(appt)) {
+            db.adjustRequestsTable(appt); // Implements lower 3
             return appt.save(db);
         } else {
             return false;
         }
     }
 
+    public boolean requestAppt(BookingRequest request) {
+        return request.save(this.db);
+    }
+
     public boolean rescheduleAppt(Appt initAppt, Timestamp newTime,Timestamp newEnd) {
 
         boolean success = this.bookAppt(new Appt(initAppt.getPatient_id(),initAppt.getGp_id(),newTime,newEnd,
-                initAppt.getSubject(),initAppt.getAppt_file(),false));
+                initAppt.getSubject(),initAppt.getAppt_details(),false));
         if (success) {
             this.cancelAppt(initAppt);
         } else {
@@ -69,7 +87,7 @@ public class LogicFunctions {
 
     private void notify(Patient patient, Appt template) {
         // TODO
-        int i = -1;
+        System.out.println("Notified Patient "+Integer.toString(patient.getPatient_id()));
     }
 
     public Timestamp getTimeStamp(String dateTime) {
@@ -116,11 +134,5 @@ public class LogicFunctions {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public static void main(String[] args) {
-        // For testing
-        // LogicFunctions.sendEmail("aryamanarora31@gmail.com", "TEST EMAIL", "wazzup");
-    }
-
+    }   
 }

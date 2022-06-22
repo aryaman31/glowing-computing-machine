@@ -17,7 +17,7 @@ export default function Slot({ startTime, endTime, hasSelected }) {
 
   return (
     <>
-      <p>Slot selected: </p>
+      <p><b>Slot selected: </b> </p>
       <div>{printSlot(printDate, printStartTime, printEndTime, hasSelected)}</div>
     </>
   )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 
-export default function Login({ name, setName }) {
+export default function AdminLogin({ adminName, setAdminName }) {
 
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ export default function Login({ name, setName }) {
     console.log(name);
     console.log(password);
 
-    navigate('/home')
+    navigate('/admin_home')
   }
 
   return (
@@ -27,15 +27,15 @@ export default function Login({ name, setName }) {
                 <input
                 id="name"
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={adminName}
+                onChange={(e) => setAdminName(e.target.value)}
                 />
           </div>
           <div>
                 <label>Password</label>
                 <input
                 id="password"
-                type="password"
+                type="text"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 />
@@ -44,7 +44,16 @@ export default function Login({ name, setName }) {
           <button type="submit">Submit</button>
 
       </form>
-      </>
+{/* 
+      <div className='options'>
+
+        <Link to="/">
+        <button>Back</button>
+        </Link>
+
+        </div> */}
+    </>
+
     
   )
 }
