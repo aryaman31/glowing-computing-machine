@@ -8,7 +8,7 @@ import java.util.*;
 public class DBWrapper implements DB {
 
     Connection con = null;
-    private boolean localDebug = true;
+    private boolean localDebug = false;
     String dburl = localDebug ? "jdbc:postgresql://localhost:5432/main" : System.getenv("JDBC_DATABASE_URL");
     // db is contained in a url - identified by : jdbc:postgresql://host:post/com.database locally,
     // else user System.getenv
@@ -32,7 +32,8 @@ public class DBWrapper implements DB {
                             "clinic_id int," +
                             "hospital_id int," +
                             "salted varchar(66)," +
-                            "salt varchar(66)" +
+                            "salt varchar(66), " +
+                            "email varchar(40) " +
                             ")";
             String createGPs =
                     "CREATE TABLE IF NOT EXISTS gps (" +
@@ -40,7 +41,8 @@ public class DBWrapper implements DB {
                             "salted varchar(66)," +
                             "salt varchar(66)," +
                             "first_name varchar(20)," +
-                            "surname varchar(20)" +
+                            "surname varchar(20), " +
+                            "email varchar(40) " +
                             ")";
 
             String createRecords =
@@ -119,16 +121,17 @@ public class DBWrapper implements DB {
         try {
             this.makeConnection();
 
-            Patient alice = new Patient(1,"Alice","Smith",1,1,"","");
+            Patient alice = new Patient(1,"Alice","Smith",1,1,"","", "alice.smith@gmail.com");
             alice.save(this);
 
-            Patient bob = new Patient(2,"Bob","Jones",1,1,"","");
+            Patient bob = new Patient(2,"Bob","Jones",1,1,"","","bob.jones@gmail.com");
             bob.save(this);
 
-            Patient charlie = new Patient(3,"Charlie","Skinner",1,1,"","");
+            Patient charlie = new Patient(3,"Charlie","Skinner",1,1,"","", "charlie.skinner@gmail.com");
             charlie.save(this);
 
-            GP thomas = new GP(111,"Thomas","Jackson","","");
+            GP thomas = new GP(111,"Thomas","Jackson","","",
+                    "thomas.jackson@gmail.com");
             thomas.save(this);
 
         } finally {
@@ -157,7 +160,8 @@ public class DBWrapper implements DB {
                             patientResult.getInt("clinic_id"),
                             patientResult.getInt("hospital_id"),
                             patientResult.getString("salted"),
-                            patientResult.getString("salt")
+                            patientResult.getString("salt"),
+                            patientResult.getString("email")
                     );
             return patient;
         } catch (SQLException E) {
@@ -187,7 +191,8 @@ public class DBWrapper implements DB {
                             gpResult.getString("first_name"),
                             gpResult.getString("surname"),
                             gpResult.getString("salted"),
-                            gpResult.getString("salt")
+                            gpResult.getString("salt"),
+                            gpResult.getString("email")
                     );
             return gp;
         } catch (SQLException E) {
@@ -299,7 +304,7 @@ public class DBWrapper implements DB {
     }
 
     @Override
-    public boolean markAppointment(int gp_id, Timestamp timeStamp) {
+    public boolean markAppointment(int gp_id, Timestamp timeStamp, String notes) {
 
 
         if (!this.makeConnection()) {
@@ -309,9 +314,16 @@ public class DBWrapper implements DB {
         try {
             PreparedStatement apptQuery =
                     con.prepareStatement("UPDATE appointments SET completed = true WHERE gp_id = ? AND ? = start_time");
+            PreparedStatement updateNotes =
+                    con.prepareStatement("UPDATE appointments " +
+                            "SET appt_details = appt_details + '\nAppointment Notes:\n' + ? WHERE gp_id = ? and ? = start_time");
             apptQuery.setInt(1, gp_id);
             apptQuery.setTimestamp(2, timeStamp);
             apptQuery.executeUpdate();
+            updateNotes.setString(1,notes);
+            updateNotes.setInt(2,gp_id);
+            updateNotes.setTimestamp(3, timeStamp);
+            updateNotes.executeUpdate();
             return true;
         } catch (SQLException E) {
             System.out.println(E.getStackTrace());
@@ -404,7 +416,10 @@ public class DBWrapper implements DB {
             while (affected.next()) {
                 Timestamp[] remaining_times = (Timestamp[]) affected.getArray("start_times").getArray();
                 if (remaining_times.length == 1) {
-                    notifyRequestFailure(affected.getInt("patient_id"),affected.getString("subject"));
+                    Patient patient = getPatient(affected.getInt("patient_id"));
+                    String message = String.format("Dear %s %s, we failed to find a slot for your appointment regarding %s. Please try again later",
+                            patient.getFirst_name(),patient.getSurname(),appt.getSubject());
+                    notify(patient.getEmail(),message);
                     removeRequest.setInt(1,affected.getInt("patient_id"));
                     removeRequest.setInt(2,affected.getInt("gp_id"));
                     removeRequest.executeUpdate();
@@ -428,11 +443,9 @@ public class DBWrapper implements DB {
     }
 
     @Override
-    public boolean notifyRequestFailure(int id, String subject) {
-        Patient patient = this.getPatient(id);
-        System.out.println(
-                String.format("Dear %s %s, we failed to find a slot for your appointment regarding %s. Please try again later",
-                        patient.getFirst_name(),patient.getSurname(), subject));
+    public boolean notify(String email, String message) {
+        System.out.println("To: "+email);
+        System.out.println(message);
         return true;
     }
 
@@ -526,28 +539,13 @@ public class DBWrapper implements DB {
         dummy2.save(db);
         */
         db.makeConnection();/*
-         */
-        try {
 
-
-
-            PreparedStatement test = db.getConnection().prepareStatement(
-                    "SELECT * FROM booking_requests WHERE ? = ANY(start_times)");
-            test.setTimestamp(1, lf.getTimeStamp("\"2021/06/16 21:30\""));
-            ResultSet results = test.executeQuery();
-            results.next();
-            System.out.println((int) results.getInt("patient_id"));
-            results.next();
-            System.out.println((int) results.getInt("patient_id"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
 
         // Objective statement:
         // SELECT * FROM booking_requests WHERE ? in start_times
         // AKA get all of the records where a specified time is in the start times for that record
         // AKA for each record, get the start times for that record, and when patient_id and gp_id are the same, use in
+        */
         db.closeConnection();
     }
 

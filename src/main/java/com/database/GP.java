@@ -10,14 +10,16 @@ public class GP implements Storeable {
     private String surname;
     private String salted;
     private String salt;
+    String email;
     private boolean[] changed = {false, false, false, false};
 
-    public GP(int gp_id, String first_name, String surname, String salted, String salt) {
+    public GP(int gp_id, String first_name, String surname, String salted, String salt, String email) {
         this.gp_id = gp_id;
         this.first_name = first_name;
         this.surname = surname;
         this.salted = salted;
         this.salt = salt;
+        this.email = email;
     }
 
 
@@ -44,6 +46,10 @@ public class GP implements Storeable {
         this.salt = salt;
         changed[3] = true;
     }
+
+    public void setEmail(String email) {this.email = email;}
+
+    public String getEmail() {return this.email;}
 
     public int getGp_id() {
         return gp_id;
@@ -72,15 +78,15 @@ public class GP implements Storeable {
     public boolean save(DB db) {
         db.makeConnection();
 
-        String addNewRecord =  "INSERT INTO gps (gp_id, first_name, surname, salted, salt) " +
-                "VALUES (?, ?,  ?, ?, ?)";
+        String addNewRecord =  "INSERT INTO gps (gp_id, first_name, surname, salted, salt, email) " +
+                "VALUES (?, ?,  ?, ?, ?, ?)";
 
         String exists = "SELECT * FROM gps WHERE gp_id = ?";
         PreparedStatement existsS;
 
         PreparedStatement addNewRecordS;
         String updateRecord = "UPDATE gps " +
-                "SET first_name = ?, surname = ?, salted = ?, salt = ? " +
+                "SET first_name = ?, surname = ?, salted = ?, salt = ?, email = ? " +
                 "WHERE gp_id = ?";
         PreparedStatement updateRecordS;
         try {
@@ -93,7 +99,8 @@ public class GP implements Storeable {
                 updateRecordS.setString(2, this.surname);
                 updateRecordS.setString(3, this.salted);
                 updateRecordS.setString(4, this.salt);
-                updateRecordS.setInt(5, this.gp_id);
+                updateRecordS.setString(5, this.email);
+                updateRecordS.setInt(6, this.gp_id);
                 updateRecordS.executeUpdate();
             } else {
 
@@ -104,6 +111,7 @@ public class GP implements Storeable {
                 addNewRecordS.setString(3, this.surname);
                 addNewRecordS.setString(4, this.salted);
                 addNewRecordS.setString(5, this.salt);
+                addNewRecordS.setString(6, this.email);
                 addNewRecordS.executeUpdate();
             }
         } catch (SQLException throwables) {

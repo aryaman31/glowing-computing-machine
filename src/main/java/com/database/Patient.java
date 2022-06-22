@@ -12,9 +12,11 @@ public class Patient implements Storeable {
     int hospital_id;
     String salted;
     String salt;
+    String email;
+
     private boolean changed[] = {false, false, false, false, false, false};
 
-    public Patient(int patient_id, String first_name, String surname, int clinic_id, int hospital_id, String salted, String salt) {
+    public Patient(int patient_id, String first_name, String surname, int clinic_id, int hospital_id, String salted, String salt, String email) {
 
 
         this.patient_id = patient_id;
@@ -24,7 +26,16 @@ public class Patient implements Storeable {
         this.hospital_id = hospital_id;
         this.salted = salted;
         this.salt = salt;
+        this.email = email;
 
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getPatient_id() {
@@ -89,11 +100,11 @@ public class Patient implements Storeable {
         String exists = "SELECT * FROM patients WHERE patient_id = ?";
         PreparedStatement existsS;
         String addNewRecord = "INSERT INTO patients " +
-                "(patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
-                "VALUES (?, ?,  ?, ?, ?, ?, ?)";
+                "(patient_id, first_name, surname, clinic_id, hospital_id, salted, salt, email) " +
+                "VALUES (?, ?,  ?, ?, ?, ?, ?, ?)";
         PreparedStatement addNewRecordS;
         String updateRecord = "UPDATE patients\n" +
-                "SET first_name = ?, surname = ?, clinic_id = ?, hospital_id = ?, salted = ?, salt = ? " +
+                "SET first_name = ?, surname = ?, clinic_id = ?, hospital_id = ?, salted = ?, salt = ?, email = ? " +
                 "WHERE patient_id = ?";
         PreparedStatement updateRecordS;
         try {
@@ -108,7 +119,9 @@ public class Patient implements Storeable {
                 updateRecordS.setInt(4, this.hospital_id);
                 updateRecordS.setString(5, this.salted);
                 updateRecordS.setString(6, this.salt);
-                updateRecordS.setInt(7, this.patient_id);
+                updateRecordS.setString(7, this.email);
+
+                updateRecordS.setInt(8, this.patient_id);
                 updateRecordS.executeUpdate();
             } else {
                 addNewRecordS = db.getConnection().prepareStatement(addNewRecord);
@@ -119,6 +132,7 @@ public class Patient implements Storeable {
                 addNewRecordS.setInt(5, this.hospital_id);
                 addNewRecordS.setString(6, this.salted);
                 addNewRecordS.setString(7, this.salt);
+                addNewRecordS.setString(8, this.email);
                 addNewRecordS.executeUpdate();
             }
         } catch (SQLException throwables) {
