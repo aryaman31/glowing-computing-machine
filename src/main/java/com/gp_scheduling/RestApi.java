@@ -87,16 +87,4 @@ public class RestApi {
         return logic.cancelAppt(initial);
 
     }
-
-
-}
-
-class Test {
-    String msg;
-    int i;
-
-    public Test(String mString, int i) {
-        this.msg = mString;
-        this.i = i;
-    }
 }

@@ -83,7 +83,7 @@ public class LogicFunctions {
     }
 
     public static boolean sendEmail(String to, String subject, String msg) {
-        String host = "smtp-relay.gmail.com";
+        String host = "smtp.gmail.com";
         String port = "587";
         String user = "drp26.bookings@gmail.com";
         String password = "rwortzktwxwigedu";
@@ -92,8 +92,7 @@ public class LogicFunctions {
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.ssl.enable", "true");
-        // props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.trust", "*");
 
         Session session = Session.getDefaultInstance(props,    
