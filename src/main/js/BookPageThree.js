@@ -166,6 +166,9 @@ export default function BookPageThree({ setUpcoming, name,
           />
         </div>
 
+        <p>The appointments from 8:00 a.m. to 9:00 a.m. and 6:00 p.m. 
+          to 8:00 p.m. will be redirected to the local hub.</p>
+
         <Slot startTime={startTime} endTime={endTime} hasSelected={hasSelected} />
 
         <br/>

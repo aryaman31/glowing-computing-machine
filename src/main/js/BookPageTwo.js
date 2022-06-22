@@ -112,9 +112,9 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
             </div>
 
 
-            {/* <Link to="/book_appointment">
-                <button onClick={handleConfirmation}>Back</button>
-            </Link> */}
+            <Link to="/home">
+                <button onClick={handleConfirmation}>Cancel</button>
+            </Link>
 
             <Link to="/appointment_slot">
                 <button onClick={handleConfirmation}>Next</button>
