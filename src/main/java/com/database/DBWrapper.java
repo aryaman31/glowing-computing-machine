@@ -419,7 +419,7 @@ public class DBWrapper implements DB {
                     Patient patient = getPatient(affected.getInt("patient_id"));
                     String message = String.format("Dear %s %s, we failed to find a slot for your appointment regarding %s. Please try again later",
                             patient.getFirst_name(),patient.getSurname(),appt.getSubject());
-                    notify(patient.getEmail(),message);
+                    notify(patient.getEmail(),"Appointment: "+appt.getSubject(),message);
                     removeRequest.setInt(1,affected.getInt("patient_id"));
                     removeRequest.setInt(2,affected.getInt("gp_id"));
                     removeRequest.executeUpdate();
@@ -443,10 +443,8 @@ public class DBWrapper implements DB {
     }
 
     @Override
-    public boolean notify(String email, String message) {
-        System.out.println("To: "+email);
-        System.out.println(message);
-        return true;
+    public boolean notify(String email,String subject, String message) {
+        return LogicFunctions.sendEmail(email,subject,message);
     }
 
     @Override

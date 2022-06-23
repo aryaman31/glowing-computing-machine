@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-// import javax.mail.*;
-// import javax.mail.internet.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 public class LogicFunctions {
 
@@ -39,7 +39,7 @@ public class LogicFunctions {
         if (noClashingAppts(appt)) {
             db.adjustRequestsTable(appt); // Implements lower 3
             GP gp = db.getGP(appt.getGp_id());
-            db.notify(db.getPatient(appt.getPatient_id()).getEmail(),
+            db.notify(db.getPatient(appt.getPatient_id()).getEmail(),"Booked Appointment",
                     "You have been booked in for an appointment with Dr. "+
                             gp.getFirst_name() + " "+gp.getSurname()+ " at "+appt.getStart_time().toString()+".");
             return appt.save(db);
@@ -79,20 +79,28 @@ public class LogicFunctions {
     }
 
     public boolean alertWaiters(Appt appt) {
+
+        /**
+         * TODO: Implement alerter based on 5 appointments
+         */
+
         List<Appt> templates = db.getWaitList(appt.getStart_time(),appt.getGp_id());
         if (templates == null) {
             return true;
         }
         for (Appt template : templates) {
-            notify(db.getPatient(template.getPatient_id()),template);
+            //notify(db.getPatient(template.getPatient_id()),"",template);
         }
         return true;
     }
 
+    /*
     private void notify(Patient patient, Appt template) {
         // TODO
         System.out.println("Notified Patient "+Integer.toString(patient.getPatient_id()));
     }
+
+     */
 
     public Timestamp getTimeStamp(String dateTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("\"yyyy/MM/dd HH:mm\"");
@@ -104,39 +112,39 @@ public class LogicFunctions {
         }
     }
 
-    // public boolean sendEmail(String to, String subject, String msg) {
-    //     String host = "smtp.gmail.com";
-    //     String port = "587";
-    //     String user = "drp26.bookings@gmail.com";
-    //     String password = "rwortzktwxwigedu";
+     public static boolean sendEmail(String to, String subject, String msg) {
+         String host = "smtp.gmail.com";
+         String port = "587";
+         String user = "drp26.bookings@gmail.com";
+         String password = "rwortzktwxwigedu";
 
-    //     Properties props = new Properties();
-    //     props.put("mail.smtp.host", host);
-    //     props.put("mail.smtp.port", port);
-    //     props.put("mail.smtp.auth", "true");
-    //     props.put("mail.smtp.starttls.enable", "true");
-    //     props.put("mail.smtp.ssl.trust", "*");
+        Properties props = new Properties();
+         props.put("mail.smtp.host", host);
+         props.put("mail.smtp.port", port);
+         props.put("mail.smtp.auth", "true");
+         props.put("mail.smtp.starttls.enable", "true");
+         props.put("mail.smtp.ssl.trust", "*");
 
-    //     Session session = Session.getDefaultInstance(props,    
-    //         new javax.mail.Authenticator() {
-    //             protected PasswordAuthentication getPasswordAuthentication() {  
-    //                 return new PasswordAuthentication(user,password);  
-    //             }  
-    //         });
-        
-    //     try {
-    //         MimeMessage message = new MimeMessage(session);
-    //         message.setFrom(new InternetAddress(user));
-    //         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-    //         message.setSubject(subject);
-    //         message.setText(msg);
+        Session session = Session.getDefaultInstance(props,
+             new javax.mail.Authenticator() {
+                 protected PasswordAuthentication getPasswordAuthentication() {
+                     return new PasswordAuthentication(user,password);
+                 }
+             });
 
-    //         Transport.send(message);
-    //         System.out.println("Message sent succesfully");
-    //         return true;
-    //     } catch (MessagingException e) {
-    //         e.printStackTrace();
-    //         return false;
-    //     }
-    // }   
+         try {
+             MimeMessage message = new MimeMessage(session);
+             message.setFrom(new InternetAddress(user));
+             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+             message.setSubject(subject);
+             message.setText(msg);
+
+            Transport.send(message);
+             System.out.println("Message sent succesfully");
+             return true;
+         } catch (MessagingException e) {
+             e.printStackTrace();
+             return false;
+         }
+     }
 }

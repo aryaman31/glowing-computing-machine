@@ -42,6 +42,6 @@ public interface DB {
 
     boolean adjustRequestsTable(Appt appt);
 
-    public boolean notify(String email, String message);
+    public boolean notify(String email,String subject, String message);
 
 }
