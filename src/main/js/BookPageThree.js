@@ -8,6 +8,8 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay"
 import "./react-big-calendar.css"
 import Slot from './Slot';
+import { doctorDummyOptions } from './PatientBookingRequests';
+import Select from 'react-select';
 
 
 export const locales = {
@@ -124,19 +126,13 @@ export default function BookPageThree({ setUpcoming, name,
 
          <div>
             <p>Please select a doctor you would like to meet</p>
-            
-            <select id="doctors" value={doctor}  
-            defaultValue={"default"}
-                    onChange={(e) => setDoctor(e.target.value)}>
-              <option value={"default"} disabled>
-                Choose a doctor from the dropdown below
-              </option>
-              <option value="Dr Smith">Dr Smith</option>
-              <option value="Dr Garcia">Dr Garcia</option>
-              <option value="Dr Jones">Dr Jones</option>
-            </select>
 
-            <p><b>Selected doctor: </b> {doctor}</p>
+            <Select
+              options={doctorDummyOptions}
+              onChange={(e) => {setDoctor(e.value)}} 
+              placeholder="Choose a doctor from the dropdown below"
+            />
+            
         </div>
 
 

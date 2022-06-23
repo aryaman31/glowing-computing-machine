@@ -18,7 +18,7 @@ export default function Home({ name }) {
 
         <br/>
 
-        <Link to="/" className='btn'>Log out</Link>
+        <Link to="/patient_login" className='btn'>Log out</Link>
 
       </div>
     </div>

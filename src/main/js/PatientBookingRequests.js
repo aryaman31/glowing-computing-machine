@@ -4,6 +4,11 @@ import { Calendar, Views } from 'react-big-calendar'
 import "./react-big-calendar.css"
 import PatientAppointment from './PatientAppointment';
 import { localizer } from './BookPageThree';
+import Select from 'react-select';
+
+export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},
+{value: 'Dr Garcia' , label: 'Dr Garcia'},
+{value: 'Dr Jones' , label: 'Dr Jones'} ]
 
 export default function PatientBookingRequests({ allAppoints, displayAppoints }) {
 
@@ -12,10 +17,10 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
   const [doctorSlots, setDoctorSlots] = useState([])
 
 
-  function handleDoctorSelection(e) {
-    console.log(displayAppoints)
-    setCurrDoctor(e.target.value)
-  }
+  // function handleDoctorSelection(e) {
+  //   console.log(displayAppoints)
+  //   setCurrDoctor(e.target.value)
+  // }
 
 
   useEffect(() => {
@@ -41,8 +46,15 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
         <h1>View patient's booking requests below</h1>
 
         <p>Please select a doctor to view their appointments</p>
+
+
+        <Select
+          options={doctorDummyOptions}
+          onChange={(e) => {setCurrDoctor(e.value)}} 
+          placeholder="Choose a doctor from the dropdown below"
+        />
       
-        <select id="doctors" value={currDoctor}  
+        {/* <select id="doctors" value={currDoctor}  
       defaultValue={"default"}
               onChange={handleDoctorSelection}>
         <option value={"default"} disabled>
@@ -51,7 +63,7 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
         <option value="Dr Smith">Dr Smith</option>
         <option value="Dr Garcia">Dr Garcia</option>
         <option value="Dr Jones">Dr Jones</option>
-      </select>
+      </select> */}
 
         <p><b>Currently viewing the appointments of: </b> {currDoctor}</p>
 

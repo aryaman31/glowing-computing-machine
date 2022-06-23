@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Select from 'react-select';
 
 
 
 
 export default function BookPageOne({ name, setProblem, setDescription }) {
+
 
   const problemRef = useRef()
   const symptomsRef = useRef()
@@ -14,6 +16,20 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
   const [category, setCategory] = useState("")
 
   const [appointmentType, setAppointmentType] = useState()
+
+  const [appTypeOptions, updateTypeOptions] = useState([
+    {value: 'face-to-face' , label: 'In-person'},
+    {value: 'phone appointment', label: 'Phone', disabled: false},
+    {value: 'home visit', label: 'Home visit'}
+    ])
+
+
+  const appointmentCategories = [
+    {value: 'a routine checkup', label: 'Routine checkup' },
+    {value: 'a blood test', label: 'Blood test' },
+    {value: 'discuss blood test result', label: 'Discuss blood test result' },
+    {value: 'a referral request', label: 'Referral request' },
+    {value: 'an appointment', label: 'Other (e.g. unusual pain)' },]
 
 
 
@@ -29,6 +45,24 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
     
   }
 
+  function handleCategory(e) {
+    setCategory(e.value)
+  }
+
+  useEffect(() => {
+    const temp = [...appTypeOptions]
+    const index = temp.findIndex((obj) => obj.value === 'phone appointment')
+    if (category === 'a blood test') {
+      temp[index].disabled = true
+    } else {
+      temp[index].disabled = false  
+    }
+    updateTypeOptions(temp)
+    console.log({appTypeOptions})
+
+  }, [category])
+
+  
 
     return (
         <>
@@ -43,40 +77,27 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
             {/* type of appointment*/}
             <div>
             <p>Please select the type of appointment you would like:</p>
-            
-            <select id="categories" value={category}  
-            defaultValue={"default"}
-                    onChange={(e) => setCategory(e.target.value)}>
-                <option value={"default"} disabled>
-                Choose a category from the dropdown below
-                </option>
-                <option value="a routine checkup">Routine checkup</option>
-                <option value="a blood test">Blood test</option>
-                <option value="discuss blood test result">Discuss blood test result</option>
-                <option value="a referral request">Referral request</option>
-                <option value="an appointment">Other (e.g. unusual pain)</option>
 
-            </select>
-                </div>
+            <Select
+              options={appointmentCategories}
+              onChange={(e) => {handleCategory(e)}} 
+              placeholder="Choose a category from the dropdown below"
+            />
+            
+            </div>
 
 
                 {/* way of seeing doctor */}
 
-                <p>Would you like an in-person appointment, telephone appointment or home appointment? </p>
-                <p><i>Please note, due to high demand for in-person appointments, certain appointments will be required to be taken over the phone.</i> </p>
+            <p>Would you like an in-person appointment, telephone appointment or home appointment? </p>
+            <p><i>Please note, due to high demand for in-person appointments, certain appointments will be required to be taken over the phone.</i> </p>
 
-                <select id="appointment type" value={appointmentType}  
-            defaultValue={"default"}
-                    onChange={(e) => setAppointmentType(e.target.value)}>
-                <option value={"default"} disabled>
-                Choose your preferred way of seeing a doctor from the dropdown below
-                </option>
-                <option value="face-to-face">In-person</option>
-                // can't do blood tests over the phone!
-                <option value="phone appointment" disabled={category === "a blood test"}>Phone</option>
-                <option value="home visit">Home visit</option>
-
-            </select>
+            <Select
+              options={appTypeOptions}
+              onChange={(e) => {setAppointmentType(e.value)}}
+              isOptionDisabled={(option) => option.disabled} 
+              placeholder="Choose your preferred way of seeing a doctor from the dropdown below"
+            />
 
 
 

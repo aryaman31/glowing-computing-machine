@@ -44,6 +44,9 @@ export default function Login({ name, setName }) {
 
             <button className='btn login-form-field' type="submit">Submit</button>
 
+            <Link to="/" className='btn'>Back</Link>
+
+
         </form>
       </div>
     
