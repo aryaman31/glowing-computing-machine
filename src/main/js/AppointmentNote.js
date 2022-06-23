@@ -6,12 +6,20 @@ export default function AppointmentNote() {
     <>
     <h1>Your note from the meeting</h1>
     {/* TODO: get from database */}
-    <p>TODO: get note data from database</p>
+    <hr/>
+    <h3>Doctor:</h3>
+    <p>Dr Phil</p>
 
-    <div>
-        <Link to="/view">
-          <button>Back</button>
-        </Link>
+    <h3>Note: </h3>
+    <li>Drink more liquids.</li>
+    <li>Eat less carbohydrates, such as chips and bread.</li>
+    <li>Have less sodium(salt) in diet</li>
+
+
+    <hr/>
+
+    <div className='row'>
+        <Link to="/view" className='btn'>Back</Link>
     </div>
     </>
   )

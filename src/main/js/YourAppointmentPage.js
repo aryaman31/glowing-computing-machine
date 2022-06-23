@@ -28,9 +28,7 @@ export default function YourAppointmentPage({ upcomings }) {
 
 
       <div>
-        <Link to="/view">
-          <button>Back</button>
-        </Link>
+        <Link to="/view" className='btn'>Back</Link>
      </div>
       
     </>

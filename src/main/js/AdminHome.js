@@ -21,10 +21,6 @@ export default function AdminHome( {adminName}) {
 
         <br/>
 
-        <Link to="/" className='btn'>
-          Back
-        </Link>
-
 
       </div>
 

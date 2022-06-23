@@ -44,15 +44,11 @@ export default function AdminLogin({ adminName, setAdminName }) {
 
             <button type="submit" className='btn login-form-field'>Submit</button>
 
+            <Link to="/" className='btn'>Back</Link>
+
         </form>
-  {/* 
-        <div className='options'>
 
-          <Link to="/">
-          <button>Back</button>
-          </Link>
-
-          </div> */}
+  
     </div>
 
     
