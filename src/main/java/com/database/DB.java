@@ -26,6 +26,7 @@ public interface DB {
     // Gets a list of partially complete appt objects (not on db) upon calling, representing potential appointments.
 
     public Patient getPatient(int patientId);
+
     public GP getGP(int gpId);
 
     public Appt getAppt(Timestamp startTime, int gpId);
@@ -34,11 +35,13 @@ public interface DB {
 
     public int getNumGPAppointments(int gpId, Timestamp currentTime, Timestamp start_time);
 
-    public boolean markAppointment(int gp_id, Timestamp timeStamp);
+
+    public boolean markAppointment(int gp_id, Timestamp timeStamp, String notes);
 
     public void populate();
 
     boolean adjustRequestsTable(Appt appt);
 
-    public boolean notify(int id, Appt appt);
+    public boolean notify(String email,String subject, String message);
+
 }

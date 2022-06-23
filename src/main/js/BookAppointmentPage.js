@@ -23,7 +23,6 @@ const localizer = dateFnsLocalizer({
 });
 
 
-
 export default function BookAppointmentPage({ setUpcoming, name, allAppoints, setAllAppoints, doctor, setDoctor }) {
 
   const doctorRef = useRef()
@@ -120,10 +119,18 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
 
     //add to all appointments
     setAllAppoints(prev => {
-      return [...prev, { start: startTime, end: endTime, title: "lul", id: newId}]
+      return [...prev, { start: startTime, end: endTime, title: "lul",
+       id: newId,
+       name: name, 
+       doctor: doctor,
+       time: printDate + ' ' + printStartTime + '-' + printEndTime, 
+       problem: problem, 
+       description: description}]
     })
 
     //TODO: actually use the data and send to database
+    console.log(category)
+    console.log(appointmentType)
     console.log(name)
     console.log(doctor)
     console.log(problem)
@@ -138,7 +145,6 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
     <h1>Let's book an appointment!</h1>
 
     <hr/>
-
 
     
     <h2> Step 1: Please consider whether your condition is appropriate to see a GP </h2>
@@ -218,7 +224,7 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
         <option value={"default"} disabled>
           Choose your preferred way of seeing a doctor from the dropdown below
         </option>
-        <option value="face-to-face">In-person</option>
+        <option value="In-person">In-person</option>
         // can't do blood tests over the phone!
         <option value="phone appointment" disabled={category === "a blood test"}>Phone</option>
         <option value="home visit">Home visit</option>

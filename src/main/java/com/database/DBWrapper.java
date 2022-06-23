@@ -1,30 +1,29 @@
 package com.database;
 
+import com.gp_scheduling.LogicFunctions;
+
 import java.sql.*;
 import java.util.*;
 
 public class DBWrapper implements DB {
 
     Connection con = null;
-    String dburl = System.getenv("JDBC_DATABASE_URL");
-    public static int slot_length = 15 * 60 * 1000;
+    private boolean localDebug = false;
+    String dburl = localDebug ? "jdbc:postgresql://localhost:5432/main" : System.getenv("JDBC_DATABASE_URL");
+    // db is contained in a url - identified by : jdbc:postgresql://host:post/com.database locally,
+    // else user System.getenv
+
 
     @Override
     public boolean setup() {
         /** Opens a connection to the com.database and populates it with tables if they do not already exist.
          */
 
-        // Older java requires Class.forName() to load the driver
-        String url = dburl; // current
-        // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
-//         Properties prop = new Properties();
-//         prop.setProperty("user", "postgres");
-//         prop.setProperty("password", "123");
-//         prop.setProperty("ssl", "false");
         try {
-            Class.forName("org.postgresql.Driver");
-//             con = DriverManager.getConnection(url, prop);
-            con = DriverManager.getConnection(url);
+            if (!this.makeConnection()) {
+                return false;
+            }
+
             String createPatients =
                     "CREATE TABLE IF NOT EXISTS patients (" +
                             "patient_id bigint CONSTRAINT patient_key PRIMARY KEY," +
@@ -33,7 +32,8 @@ public class DBWrapper implements DB {
                             "clinic_id int," +
                             "hospital_id int," +
                             "salted varchar(66)," +
-                            "salt varchar(66)" +
+                            "salt varchar(66), " +
+                            "email varchar(40) " +
                             ")";
             String createGPs =
                     "CREATE TABLE IF NOT EXISTS gps (" +
@@ -41,7 +41,8 @@ public class DBWrapper implements DB {
                             "salted varchar(66)," +
                             "salt varchar(66)," +
                             "first_name varchar(20)," +
-                            "surname varchar(20)" +
+                            "surname varchar(20), " +
+                            "email varchar(40) " +
                             ")";
 
             String createRecords =
@@ -51,8 +52,8 @@ public class DBWrapper implements DB {
                             "start_time timestamp," +
                             "end_time timestamp," +
                             "subject varchar(50)," +
-                            "appt_file bigint," + // Files numerically produced representing appt, path should be known before
-                            "cancelled boolean," +
+                            "appt_details text," + // Files numerically produced representing appt, path should be known before
+                            "completed boolean," +
                             "PRIMARY KEY(start_time,gp_id)," +
                             "CONSTRAINT patient_key FOREIGN KEY(patient_id) REFERENCES patients(patient_id)," +
                             "CONSTRAINT gp_key FOREIGN KEY(gp_id) REFERENCES gps(gp_id)" +
@@ -76,7 +77,7 @@ public class DBWrapper implements DB {
                         "gp_id bigint," +
                         "start_times timestamp[]," +
                         "subject varchar(50)," +
-                        "appt_file bigint," + // Files numerically produced representing appt, path should be known before
+                        "appt_details text," + // Txt representing details of appt
                         "booking_requests_key SERIAL PRIMARY KEY," +
                         "request_time timestamp, " +
                         "CONSTRAINT patient_key FOREIGN KEY(patient_id) REFERENCES patients(patient_id)," +
@@ -103,10 +104,10 @@ public class DBWrapper implements DB {
             createBookingRequestsS.execute();
             createBookingRequestsS.close();
 
-            con.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("DATABSE NOT CONNECTED");
-            e.printStackTrace();
+            this.closeConnection();
+
+        } catch (SQLException e) {
+            System.out.println(e.getStackTrace());
             return false;
         }
 
@@ -116,41 +117,23 @@ public class DBWrapper implements DB {
 
     @Override
     public void populate() {
+
         try {
             this.makeConnection();
 
-            String insertString =  "INSERT INTO patients (patient_id, first_name, surname, clinic_id, hospital_id, salted, salt) " +
-                    "VALUES (?, ?,  ?, ?, ?, ?, ?)";
-            PreparedStatement insertPatient = con.prepareStatement(insertString);
-            insertPatient.setInt(1,1);
-            insertPatient.setString(2,"Alice");
-            insertPatient.setString(3,"Smith");
-            insertPatient.setInt(4,1);
-            insertPatient.setInt(5,1);
-            insertPatient.setString(6,"");
-            insertPatient.setString(7,"");
-            insertPatient.executeUpdate();
-            insertPatient.setInt(1,2);
-            insertPatient.setString(2,"Bob");
-            insertPatient.setString(3,"Jones");
-            insertPatient.executeUpdate();
-            insertPatient.setInt(1,3);
-            insertPatient.setString(2,"Charlie");
-            insertPatient.setString(3,"Skinner");
-            insertPatient.executeUpdate();
-            insertString =  "INSERT INTO gps (gp_id, first_name, surname, salted, salt) " +
-                    "VALUES (?, ?,  ?, ?, ?)";
-            PreparedStatement insertGP = con.prepareStatement(insertString);
-            insertGP.setInt(1,111);
-            insertGP.setString(2,"Thomas");
-            insertGP.setString(3,"Jackson");
-            insertGP.setString(4,"");
-            insertGP.setString(5,"");
-            insertGP.executeUpdate();
+            Patient alice = new Patient(1,"Alice","Smith",1,1,"","", "alice.smith@gmail.com");
+            alice.save(this);
 
-        } catch (SQLException e) {
-            System.out.println("DATABSE COULDNT POPULATE ANYTHING");
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            Patient bob = new Patient(2,"Bob","Jones",1,1,"","","bob.jones@gmail.com");
+            bob.save(this);
+
+            Patient charlie = new Patient(3,"Charlie","Skinner",1,1,"","", "charlie.skinner@gmail.com");
+            charlie.save(this);
+
+            GP thomas = new GP(111,"Thomas","Jackson","","",
+                    "thomas.jackson@gmail.com");
+            thomas.save(this);
+
         } finally {
             this.closeConnection();
         }
@@ -177,10 +160,12 @@ public class DBWrapper implements DB {
                             patientResult.getInt("clinic_id"),
                             patientResult.getInt("hospital_id"),
                             patientResult.getString("salted"),
-                            patientResult.getString("salt")
+                            patientResult.getString("salt"),
+                            patientResult.getString("email")
                     );
             return patient;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return null;
         } finally {
             this.closeConnection();
@@ -206,10 +191,12 @@ public class DBWrapper implements DB {
                             gpResult.getString("first_name"),
                             gpResult.getString("surname"),
                             gpResult.getString("salted"),
-                            gpResult.getString("salt")
+                            gpResult.getString("salt"),
+                            gpResult.getString("email")
                     );
             return gp;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return null;
         } finally {
             this.closeConnection();
@@ -228,7 +215,7 @@ public class DBWrapper implements DB {
             apptQuery.setInt(2, gpId);
             ResultSet apptResult = apptQuery.executeQuery();
             if (!apptResult.next()) {
-                return new Appt(-1, -1, new Timestamp(0), new Timestamp(0), "", -1, false);
+                return new Appt(-1, -1, new Timestamp(0), new Timestamp(0), "", "", false);
             }
             Appt appt =
                     new Appt(
@@ -237,13 +224,14 @@ public class DBWrapper implements DB {
                             apptResult.getTimestamp("start_time"),
                             apptResult.getTimestamp("end_time"),
                             apptResult.getString("subject"),
-                            apptResult.getInt("appt_file"),
-                            apptResult.getBoolean("cancelled")
+                            apptResult.getString("appt_details"),
+                            apptResult.getBoolean("completed")
 
                     );
             appt.db = this;
             return appt;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return null;
         } finally {
             this.makeConnection();
@@ -270,9 +258,9 @@ public class DBWrapper implements DB {
                                 apptResult.getInt("patient_id"),
                                 apptResult.getInt("gp_id"),
                                 timeslot,
-                                new Timestamp(timeslot.getTime() + slot_length),
+                                new Timestamp(timeslot.getTime() + LogicFunctions.slot_length),
                                 apptResult.getString("subject"),
-                                apptResult.getInt("appt_file"),
+                                apptResult.getString("appt_details"),
                                 false
                         );
                 appt.db = this;
@@ -280,6 +268,7 @@ public class DBWrapper implements DB {
             }
             return toReturn;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return null;
         } finally {
             this.makeConnection();
@@ -297,7 +286,7 @@ public class DBWrapper implements DB {
 
         try {
             PreparedStatement apptQuery =
-                    con.prepareStatement("SELECT * FROM appointments WHERE gp_id = ? AND cancelled = false");
+                    con.prepareStatement("SELECT * FROM appointments WHERE gp_id = ? AND completed = false");
             apptQuery.setInt(1, gpId);
             ResultSet gpAppts = apptQuery.executeQuery();
             if (!gpAppts.next()) {
@@ -307,6 +296,7 @@ public class DBWrapper implements DB {
             int size = gpAppts.getRow(); // get row id
             return size;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return -1;
         } finally {
             this.closeConnection();
@@ -314,7 +304,7 @@ public class DBWrapper implements DB {
     }
 
     @Override
-    public boolean markAppointment(int gp_id, Timestamp timeStamp) {
+    public boolean markAppointment(int gp_id, Timestamp timeStamp, String notes) {
 
 
         if (!this.makeConnection()) {
@@ -323,12 +313,20 @@ public class DBWrapper implements DB {
 
         try {
             PreparedStatement apptQuery =
-                    con.prepareStatement("UPDATE appointments SET cancelled = true WHERE gp_id = ? AND ? = start_time");
+                    con.prepareStatement("UPDATE appointments SET completed = true WHERE gp_id = ? AND ? = start_time");
+            PreparedStatement updateNotes =
+                    con.prepareStatement("UPDATE appointments " +
+                            "SET appt_details = appt_details + '\nAppointment Notes:\n' + ? WHERE gp_id = ? and ? = start_time");
             apptQuery.setInt(1, gp_id);
             apptQuery.setTimestamp(2, timeStamp);
             apptQuery.executeUpdate();
+            updateNotes.setString(1,notes);
+            updateNotes.setInt(2,gp_id);
+            updateNotes.setTimestamp(3, timeStamp);
+            updateNotes.executeUpdate();
             return true;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return false;
         } finally {
             this.closeConnection();
@@ -348,7 +346,7 @@ public class DBWrapper implements DB {
 
         try {
             PreparedStatement wlq = con.prepareStatement(
-                    "SELECT * FROM appointments WHERE ? = ANY(start_times) AND gp_id = ?");
+                    "SELECT * FROM wait_list WHERE ? = ANY(start_times) AND gp_id = ?");
             wlq.setTimestamp(1, time);
             wlq.setInt(2, gpId);
             ResultSet wlResult = wlq.executeQuery();
@@ -359,15 +357,16 @@ public class DBWrapper implements DB {
                                 wlResult.getInt("patient_id"),
                                 wlResult.getInt("gp_id"),
                                 time,
-                                Appt.getEndTimeOnAppt(time),
+                                LogicFunctions.getEndTime(time),
                                 wlResult.getString("subject"),
-                                -1,
+                                wlResult.getString("appt_details"),
                                 false
 
                         );
             }
             return wl;
         } catch (SQLException E) {
+            E.printStackTrace();
             return null;
         } finally {
             this.closeConnection();
@@ -397,28 +396,37 @@ public class DBWrapper implements DB {
 
         try {
             PreparedStatement removeRequest = con.prepareStatement(
-                    "DELETE * FROM booking_requests WHERE patient_id = ? AND gp_id = ?");
+                    "DELETE FROM booking_requests WHERE patient_id = ? AND gp_id = ?");
             removeRequest.setInt(1, appt.getPatient_id());
             removeRequest.setInt(2, appt.getGp_id());
             removeRequest.executeUpdate();
             PreparedStatement getAffected = con.prepareStatement(
-                    "SELECT * FROM boooking_requests WHERE ? IN start_times AND gp_id = ?"
-            );
+                    "SELECT * FROM booking_requests WHERE ? =ANY(start_times) AND gp_id = ?");
+
+            getAffected.setTimestamp(1,appt.getStart_time());
+            getAffected.setInt(2,appt.getGp_id());
+
+
             PreparedStatement adjustStartTimes = con.prepareStatement(
                     "UPDATE booking_requests SET start_times = ? WHERE patient_id = ? AND gp_id = ?"
             );
+
+
             ResultSet affected = getAffected.executeQuery();
             while (affected.next()) {
                 Timestamp[] remaining_times = (Timestamp[]) affected.getArray("start_times").getArray();
                 if (remaining_times.length == 1) {
+                    Patient patient = getPatient(affected.getInt("patient_id"));
+                    String message = String.format("Dear %s %s, we failed to find a slot for your appointment regarding %s. Please try again later",
+                            patient.getFirst_name(),patient.getSurname(),appt.getSubject());
+                    notify(patient.getEmail(),"Appointment: "+appt.getSubject(),message);
                     removeRequest.setInt(1,affected.getInt("patient_id"));
                     removeRequest.setInt(2,affected.getInt("gp_id"));
                     removeRequest.executeUpdate();
-                    this.notify(affected.getInt("patient_id"),new Appt(-1,-1,null,null,null,-1,false));
                 } else {
-                    List<Timestamp> param = Arrays.asList((Timestamp[]) affected.getArray("start_times").getArray());
-                    param.remove(appt.getStart_time());
-                    adjustStartTimes.setArray(1,con.createArrayOf("timestamp", param.toArray()));
+                    List<Timestamp> newStartTimes = Arrays.asList((Timestamp[]) affected.getArray("start_times").getArray());
+                    newStartTimes.remove(appt.getStart_time());
+                    adjustStartTimes.setArray(1,con.createArrayOf("timestamp", newStartTimes.toArray()));
                     adjustStartTimes.setInt(2,affected.getInt("patient_id"));
                     adjustStartTimes.setInt(3,affected.getInt("gp_id"));
                     adjustStartTimes.executeUpdate();
@@ -426,39 +434,40 @@ public class DBWrapper implements DB {
             }
             return true;
         } catch (SQLException E) {
+            E.printStackTrace();
             return false;
         } finally {
             this.closeConnection();
         }
 
-
     }
 
     @Override
-    public boolean notify(int id, Appt appt) {
-        // TODO
-        return false;
+    public boolean notify(String email,String subject, String message) {
+        return LogicFunctions.sendEmail(email,subject,message);
     }
 
     @Override
     public boolean makeConnection() {
+
         /**
-         * Opens a connection to the com.database and populates it with tables if they do not already exist.
+         * Opens a connection to the com.database
          */
 
         // Older java requires Class.forName() to load the driver
         String url = dburl; // current
-        // db is contained in a url - identified by : jdbc::postgresql//host:post/com.database
-//         Properties prop = new Properties();
-//         prop.setProperty("user", "postgres");
-//         prop.setProperty("password", "123");
-//         prop.setProperty("ssl", "false");
+        Properties prop = new Properties();
+        if (this.localDebug) {
+            prop.setProperty("user", "lucas");
+            prop.setProperty("password", "password");
+            prop.setProperty("ssl", "false");
+        }
         try {
             Class.forName("org.postgresql.Driver");
-//             this.con = DriverManager.getConnection(url, prop);
-            this.con = DriverManager.getConnection(url);
+            this.con = this.localDebug ? DriverManager.getConnection(url, prop) : DriverManager.getConnection(url);
 
         } catch (Exception E) {
+            System.out.println(E.getStackTrace());
             return false;
         }
         return true;
@@ -470,6 +479,7 @@ public class DBWrapper implements DB {
             this.con.close();
             return this.con.isClosed();
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return false;
         }
     }
@@ -506,6 +516,7 @@ public class DBWrapper implements DB {
             }
             return ret;
         } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
             return null;
         } finally {
             this.closeConnection();
@@ -516,6 +527,24 @@ public class DBWrapper implements DB {
         DB db = new DBWrapper();
 
         db.setup();
+
+        LogicFunctions lf = new LogicFunctions(db);
+        LinkedList<Timestamp> dumlist = new LinkedList<Timestamp>(List.of(lf.getTimeStamp("\"2021/06/16 21:30\"")));
+        /*
+        BookingRequest dummy = new BookingRequest(3,111,dumlist,new Timestamp(0),"Different","Different");
+        BookingRequest dummy2 = new BookingRequest(2,111,dumlist,new Timestamp(0),"Different","Different");
+        dummy.save(db);
+        dummy2.save(db);
+        */
+        db.makeConnection();/*
+
+
+        // Objective statement:
+        // SELECT * FROM booking_requests WHERE ? in start_times
+        // AKA get all of the records where a specified time is in the start times for that record
+        // AKA for each record, get the start times for that record, and when patient_id and gp_id are the same, use in
+        */
+        db.closeConnection();
     }
 
 }
