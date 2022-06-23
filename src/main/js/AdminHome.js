@@ -3,34 +3,33 @@ import { Link } from 'react-router-dom';
 
 export default function AdminHome( {adminName}) {
   return (
-    <>
-      <nav className='navbar'>
-        <h1>Welcome, {adminName}!</h1>
-        <h2>What would you like to do?</h2>
+    <div className='fit-to-page center column'>
+      <h1>Welcome, {adminName}!</h1>
+      <h2>What would you like to do?</h2>
 
-        <div className='options'>
+      <div className='options login-form'>
 
-          <Link to="/patient_booking_requests">
-            <button>Manage patient booking requests</button>
-          </Link>
+        <Link to="/patient_booking_requests" className='btn'>
+          Manage patient booking requests
+        </Link>
 
-          <br/>
+        <br/>
 
-      <Link to="/admin_login">
-        <button>Back</button>
-      </Link>
+        <Link to="/admin_login" className='btn'>
+          Back
+        </Link>
 
-      <br/>
+        <br/>
 
-<Link to="/">
-  <button>Log out</button>
-</Link>
+        <Link to="/" className='btn'>
+          Log out
+        </Link>
 
 
-        </div>
+      </div>
 
-      </nav>
-    </>
+    
+    </div>
         
   )
 }

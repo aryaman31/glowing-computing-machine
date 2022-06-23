@@ -44,13 +44,13 @@ export default function AppointmentList({ upcomings, setUpcoming, allAppoints, s
           <div key={a.id}>
             <Appointment appointment={a}/>
 
-            <button onClick={() => handleCancel(a.id)}>
+            <button onClick={() => handleCancel(a.id)} className='btn small-width'>
               Cancel appointment
             </button>
 
             { dialog.isLoading && <Dialog onDialog={areUSureDelete} message={dialog.message}/>}
+            <hr/>
           </div>
-
         )
     })
   )

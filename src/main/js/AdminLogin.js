@@ -19,40 +19,40 @@ export default function AdminLogin({ adminName, setAdminName }) {
   }
 
   return (
-      <>
-      <h1>Please enter your name and a password to revisit your session</h1>
-      <form onSubmit={handleSubmit}>
-          <div>
-              <label>Name</label>
-                <input
-                id="name"
-                type="text"
-                value={adminName}
-                onChange={(e) => setAdminName(e.target.value)}
-                />
-          </div>
-          <div>
-                <label>Password</label>
-                <input
-                id="password"
-                type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                />
-          </div>
+      <div className='fit-to-page column center'>
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit} className='login-form center'>
+            <div className='login-form-field'>
+                <label>Name</label>
+                  <input
+                  id="name"
+                  type="text"
+                  value={adminName}
+                  onChange={(e) => setAdminName(e.target.value)}
+                  />
+            </div>
+            <div className='login-form-field'>
+                  <label>Password</label>
+                  <input
+                  id="password"
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  />
+            </div>
 
-          <button type="submit">Submit</button>
+            <button type="submit" className='btn login-form-field'>Submit</button>
 
-      </form>
-{/* 
-      <div className='options'>
+        </form>
+  {/* 
+        <div className='options'>
 
-        <Link to="/">
-        <button>Back</button>
-        </Link>
+          <Link to="/">
+          <button>Back</button>
+          </Link>
 
-        </div> */}
-    </>
+          </div> */}
+    </div>
 
     
   )

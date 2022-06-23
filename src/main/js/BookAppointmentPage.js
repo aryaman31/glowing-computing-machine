@@ -331,14 +331,10 @@ export default function BookAppointmentPage({ setUpcoming, name, allAppoints, se
       
     <br/>  
     
-    <div>
-      <Link to="/view">
-        <button onClick={handleConfirmation}>Confirm</button>
-      </Link>
+    <div className='row'>
+      <Link to="/view" className='btn' onClick={handleConfirmation}> Confirm</Link>
 
-      <Link to="/home">
-        <button>Back</button>
-      </Link>
+      <Link to="/home" className='btn'>Back</Link>
     </div>  
 
     </>

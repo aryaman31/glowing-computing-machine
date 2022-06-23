@@ -8,9 +8,7 @@ export default function PatientBookingRequests() {
         
         <div className='options'>
 
-        <Link to="/admin_home">
-        <button>Back</button>
-        </Link>
+        <Link to="/admin_home" className='btn'>Back</Link>
 
         </div>
     </>

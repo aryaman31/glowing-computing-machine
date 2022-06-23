@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('./fonts/Roboto/Roboto-Light.woff'),
+        url('./fonts/Roboto/Roboto-Light.woff2');
+    /* font-weight: 300; */
+    /* font-style: normal; */
+    /* font-display: swap; */
+}
+
+body {
+    background-color: rgb(2, 2, 139);
+    margin: 0px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+}
+
+#root {
+    display: block;
+    margin: -1px 100px 0px 100px;
+    padding: 50px;
+    background-color: white;
+    overflow: auto;
+}
+
+.center {
+    text-align: center;
+    align-items: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+}
+
+.fit-to-page {
+    height: calc(100vh - 100px);
+}
+
+/* CSS */
+.btn {
+  align-items: center;
+  background-color: lightblue;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  height: 48px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 100%;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.btn:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 48px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+.btn:hover:after {
+  transform: translate(0, 0);
+}
+
+.btn:active {
+  background-color: lightcyan;
+  outline: 0;
+}
+
+.btn:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .btn {
+    padding: 0 40px;
+  }
+}
+
+.login-form {
+    border-style: solid;
+    padding: 10px;
+    width: 30%;
+}
+
+.login-form-field {
+    display: flex;
+    float: left;
+    clear: left;
+    width: 100%; 
+    text-align: right;
+}
+
+.login-form-field > * {
+    margin: 10px;
+}
+
+label {
+    width: 100px;
+}
+
+.small-width {
+    width: 230px;
+}
