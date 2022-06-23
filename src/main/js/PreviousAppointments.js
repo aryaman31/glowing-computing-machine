@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom'
 export default function PreviousAppointments({ prevappoint }) {
   return (
     <>
-    <p>
-      {prevappoint.time} {prevappoint.doctor}
-    </p>
-    <Link to="/note">
-      <button>View note</button>
-    </Link>
+    <p>Time: {prevappoint.time} </p>
+    <p>Doctor: {prevappoint.doctor}</p>
+    <Link to="/note" className='btn small-width'>View Note</Link>
+    <hr/>
     </>
   )
 }

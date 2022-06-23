@@ -3,34 +3,25 @@ import { Link } from 'react-router-dom';
 
 export default function Home({ name }) {
   return (
-    <>
-      <nav className='navbar'>
-        <h1>Welcome, {name}!</h1>
-        <h2>What would you like to do?</h2>
+    <div className='fit-to-page center column'>
+      <h1>Welcome, {name}!</h1>
+      <h2>What would you like to do?</h2>
 
-        <div className='options'>
+      <div className='options login-form'>
 
-          <Link to="/book_appointment">
-            <button>Book an appointment</button>
-          </Link>
+        <Link to="/bookings" className='btn'>Book an appointment</Link>
 
-          <br/>
+        <br/>
 
 
-          <Link to="/view">
-            <button>View my appointments</button>
-          </Link>
+        <Link to="/view" className='btn'>View appointments</Link>
 
-          <br/>
+        <br/>
 
-          <Link to="/patient_login">
-            <button>Log out</button>
-          </Link>
+        <Link to="/" className='btn'>Log out</Link>
 
-        </div>
-
-      </nav>
-    </>
+      </div>
+    </div>
         
   )
 }

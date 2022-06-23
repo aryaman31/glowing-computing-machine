@@ -95,9 +95,7 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
 
         <br/>
         
-        <Link to="/admin_home">
-          <button>Back</button>
-        </Link>
+        <Link to="/admin_home" className='btn'>Back</Link>
     </>
         
   )

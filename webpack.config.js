@@ -5,6 +5,7 @@ module.exports = {
     // devtool: 'sourcemaps',
     cache: true,
     mode: 'development',
+    // watch: true,
     output: {
         path: __dirname,
         filename: './src/main/resources/static/built/bundle.js'
@@ -24,7 +25,11 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader"]
-            },   
+            },
+            {
+                test: /\.(woff|woff2|ttf|eot)$/,
+                use: 'file-loader?name=fonts/[name].[ext]!static'
+            }   
         ]
     }
 };

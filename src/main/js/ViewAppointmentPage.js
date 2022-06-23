@@ -12,7 +12,7 @@ export default function ViewAppointmentPage({ upcomings, setUpcoming, allAppoint
     description: "placeholder"}
 
   return (
-    <>
+    <div className='fit-to-page'>
       <h1>Your appointments</h1>
       
       <div>
@@ -34,11 +34,9 @@ export default function ViewAppointmentPage({ upcomings, setUpcoming, allAppoint
       </div>
 
       <br/>
-      <div>
-        <Link to="/home">
-          <button>Back</button>
-        </Link>
+      <div className='row'>
+        <Link to="/home" className='btn'>Back</Link>
       </div>
-    </>  
+    </div>  
   )
 }

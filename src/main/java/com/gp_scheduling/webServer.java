@@ -18,7 +18,8 @@ public class webServer {
 		SpringApplication.run(webServer.class, args);
 	}
 
-	@RequestMapping(value = {"/", "/home", "/bookings", "/view", "/your_appointment", "/note"})
+	@RequestMapping(value = {"/", "/home", "/bookings", "/view", "/your_appointment", "/note", 
+					"/patient_login", "/admin_login", "/admin_home", "/patient_booking_requests"})
 	public String index() {
 		return "index";
 	}

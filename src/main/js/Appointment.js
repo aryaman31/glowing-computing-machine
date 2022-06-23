@@ -4,13 +4,10 @@ import { Link } from 'react-router-dom'
 export default function Appointment({ appointment }) {
 
   return (
-    <>
-    <p>
-      {appointment.time} {appointment.doctor}
-    </p>
-    <Link to={`/your_appointment/${appointment.id}`}>
-      <button>Details</button>
-    </Link>
-    </>
+    <div>
+      <p>Time: {appointment.time}</p>
+      <p>Doctor: {appointment.doctor}</p>
+      <Link to={`/your_appointment/${appointment.id}`} className='btn small-width'> Details</Link>
+    </div>
   )
 }
