@@ -9,52 +9,45 @@ export default function BookPageOne({ name }) {
 
     return (
         <>
-        <h1> Let's book an appointment, {name}! </h1>
+            <h1> Let's book an appointment, {name}! </h1>
 
-        <hr/>
+            <hr/>
 
-        <h2> Step 1: Please consider whether your condition is appropriate to see a GP </h2>
+            <h2> Step 1: Please consider whether your condition is appropriate to see a GP </h2>
 
-    <div style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
+            <div style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
 
-    <p> Firstly, are you experiencing any of the following symptoms? </p>
+            <p> Firstly, are you experiencing any of the following symptoms? </p>
 
-    <ul>
-              <li>Chest pain</li>
-              <li>Broken bones</li>
-              <li>Bleeding that won't stop</li>
-              <li>Difficulty completing a sentence</li>
-        </ul>
+            <ul>
+                <li>Chest pain</li>
+                <li>Broken bones</li>
+                <li>Bleeding that won't stop</li>
+                <li>Difficulty completing a sentence</li>
+            </ul>
 
-    <h3> If so, your condition is too urgent to see a GP, please go to A and E or dial 999. </h3>
+            <h3> If so, your condition is too urgent to see a GP, please go to A and E or dial 999. </h3>
 
-    </div>
+            </div>
 
-    <div className='options' style={{display: "flex"}}>
+            <div className='options row'>
 
-          <Link to="/home">
-            <button>Back</button>
-          </Link>
+                <Link to="/home" className='btn'> Back</Link>
 
-          <br/>
+                <br/>
 
+                <Link to="/appointment_details" className='btn'>Next</Link>
 
-          <Link to="/appointment_details">
-            <button>Next</button>
-          </Link>
+                <br/>
+    
+            </div>
 
-          <br/>
- 
-    </div>
+            <br/>  
 
-    <br/>  
-
-
-
-    <h3> Step 1 of 3</h3>
+            <h3> Step 1 of 3</h3>
 
 
         </>

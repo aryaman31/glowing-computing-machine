@@ -177,14 +177,10 @@ export default function BookPageThree({ setUpcoming, name,
                 <button onClick={handleConfirmation}>Back</button>
             </Link> */}
 
-        <div>
-          <Link to="/view">
-            <button onClick={handleConfirmation}>Create appointment</button>
-          </Link>
+        <div className='row'>
+          <Link to="/view" onClick={handleConfirmation} className='btn'>Create appointment</Link>
 
-          <Link to="/home">
-            <button>Cancel</button>
-          </Link>
+          <Link to="/home" className='btn'>Cancel</Link>
         </div>  
 
 

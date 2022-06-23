@@ -111,16 +111,11 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
                 placeholder='eg. "Experiencing strong pain in upper-back for 4 weeks"'></textarea>
             </div>
 
+            <div className='row'>
+                <Link to="/home" onClick={handleConfirmation} className='btn'>Cancel</Link>
 
-            <Link to="/home">
-                <button onClick={handleConfirmation}>Cancel</button>
-            </Link>
-
-            <Link to="/appointment_slot">
-                <button onClick={handleConfirmation}>Next</button>
-            </Link>
-
-
+                <Link to="/appointment_slot" onClick={handleConfirmation} className='btn'>Next</Link>
+            </div>
 
             <h3> Step 2 of 3</h3>
 

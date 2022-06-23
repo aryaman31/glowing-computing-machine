@@ -19,7 +19,8 @@ public class webServer {
 	}
 
 	@RequestMapping(value = {"/", "/home", "/bookings", "/view", "/your_appointment", "/note", 
-					"/patient_login", "/admin_login", "/admin_home", "/patient_booking_requests"})
+					"/patient_login", "/admin_login", "/admin_home", "/patient_booking_requests",
+					"/book_appointment", "/appointment_details", "/appointment_slot"})
 	public String index() {
 		return "index";
 	}

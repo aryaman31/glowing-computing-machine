@@ -9,7 +9,7 @@ export default function Home({ name }) {
 
       <div className='options login-form'>
 
-        <Link to="/bookings" className='btn'>Book an appointment</Link>
+        <Link to="/book_appointment" className='btn'>Book an appointment</Link>
 
         <br/>
 
