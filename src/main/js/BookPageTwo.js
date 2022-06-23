@@ -61,7 +61,7 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
 
 
                 {/* way of seeing doctor */}
-
+            <div>
                 <p>Would you like an in-person appointment, telephone appointment or home appointment? </p>
                 <p><i>Please note, due to high demand for in-person appointments, certain appointments will be required to be taken over the phone.</i> </p>
 
@@ -76,7 +76,8 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
                 <option value="phone appointment" disabled={category === "a blood test"}>Phone</option>
                 <option value="home visit">Home visit</option>
 
-            </select>
+                </select>
+            </div>
 
 
 

@@ -112,39 +112,44 @@ public class LogicFunctions {
         }
     }
 
-     public static boolean sendEmail(String to, String subject, String msg) {
-         String host = "smtp.gmail.com";
-         String port = "587";
-         String user = "drp26.bookings@gmail.com";
-         String password = "rwortzktwxwigedu";
+    public static boolean sendEmail(String to, String subject, String msg) {
+        String host = "smtp.gmail.com";
+        String port = "587";
+        String user = "drp26.bookings@gmail.com";
+        String password = "edxunjttjnbxuaqf";
 
-        Properties props = new Properties();
-         props.put("mail.smtp.host", host);
-         props.put("mail.smtp.port", port);
-         props.put("mail.smtp.auth", "true");
-         props.put("mail.smtp.starttls.enable", "true");
-         props.put("mail.smtp.ssl.trust", "*");
+    Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", host);
 
-        Session session = Session.getDefaultInstance(props,
-             new javax.mail.Authenticator() {
-                 protected PasswordAuthentication getPasswordAuthentication() {
-                     return new PasswordAuthentication(user,password);
-                 }
-             });
+    Session session = Session.getDefaultInstance(props,
+            new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user,password);
+                }
+            });
 
-         try {
-             MimeMessage message = new MimeMessage(session);
-             message.setFrom(new InternetAddress(user));
-             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-             message.setSubject(subject);
-             message.setText(msg);
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setText(msg);
 
+            
             Transport.send(message);
-             System.out.println("Message sent succesfully");
-             return true;
-         } catch (MessagingException e) {
-             e.printStackTrace();
-             return false;
-         }
-     }
+            System.out.println("Message sent succesfully");
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        sendEmail("aryamanarora31@gmail.com", "Subject", "sean is weird");
+    }
 }
