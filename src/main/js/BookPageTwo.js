@@ -87,7 +87,7 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
             </div>
 
 
-                {/* way of seeing doctor */}
+            {/* way of seeing doctor */}
 
             <p>Would you like an in-person appointment, telephone appointment or home appointment? </p>
             <p><i>Please note, due to high demand for in-person appointments, certain appointments will be required to be taken over the phone.</i> </p>

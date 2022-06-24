@@ -1,33 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, Views } from 'react-big-calendar'
 import "./react-big-calendar.css"
 import PatientAppointment from './PatientAppointment';
 import { localizer } from './BookPageThree';
 import Select from 'react-select';
+import { returnNoSameSlots } from './App';
 
 export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},
 {value: 'Dr Garcia' , label: 'Dr Garcia'},
 {value: 'Dr Jones' , label: 'Dr Jones'} ]
 
-export default function PatientBookingRequests({ allAppoints, displayAppoints }) {
+export default function PatientBookingRequests({ allAppoints }) {
 
   const [thisDaySlots, setThisDaySlots] = useState([])
   const [currDoctor, setCurrDoctor] = useState("")
   const [doctorSlots, setDoctorSlots] = useState([])
 
 
-  // function handleDoctorSelection(e) {
-  //   console.log(displayAppoints)
-  //   setCurrDoctor(e.target.value)
-  // }
-
-
   useEffect(() => {
     console.log({currDoctor})
-    const temp = [...displayAppoints]
+    const temp = [...allAppoints]
     const res = temp.filter(elem => elem.doctor === currDoctor)
-    setDoctorSlots(res)
+    //returnNoSameSlot so no overlap in display
+    setDoctorSlots(returnNoSameSlots(res))
+    setThisDaySlots([])
   }, [currDoctor])
 
 
@@ -53,17 +50,6 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
           onChange={(e) => {setCurrDoctor(e.value)}} 
           placeholder="Choose a doctor from the dropdown below"
         />
-      
-        {/* <select id="doctors" value={currDoctor}  
-      defaultValue={"default"}
-              onChange={handleDoctorSelection}>
-        <option value={"default"} disabled>
-          Choose a doctor from the dropdown below
-        </option>
-        <option value="Dr Smith">Dr Smith</option>
-        <option value="Dr Garcia">Dr Garcia</option>
-        <option value="Dr Jones">Dr Jones</option>
-      </select> */}
 
         <p><b>Currently viewing the appointments of: </b> {currDoctor}</p>
 
@@ -95,11 +81,11 @@ export default function PatientBookingRequests({ allAppoints, displayAppoints })
         <div className='currSlotAppointments'>
           {thisDaySlots.map(a => {
             return (
-              <div key={a.id}>
+              <Fragment key={a.id}>
                 <PatientAppointment appoint={a}/>
                 <button>Send confirmation</button>
                 <hr/>
-              </div>
+              </Fragment>
             )
           })}
           
