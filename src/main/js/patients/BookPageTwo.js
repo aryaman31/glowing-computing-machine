@@ -25,11 +25,11 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
 
 
   const appointmentCategories = [
-    {value: 'a routine checkup', label: 'Routine checkup' },
+    {value: 'an appointment', label: 'New problem'},
     {value: 'a blood test', label: 'Blood test' },
     {value: 'discuss blood test result', label: 'Discuss blood test result' },
     {value: 'a referral request', label: 'Referral request' },
-    {value: 'an appointment', label: 'Other (e.g. unusual pain)' },]
+    {value: 'a routine checkup', label: 'Routine checkup' },]
 
 
 
@@ -114,8 +114,8 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
 
 
             <div>
-            <p>Any symptoms and their severity </p>
-            <input ref={symptomsRef} type="text" size={50} placeholder='eg. "Severe back-pain, mild swelling of knees"'/>
+            <p>Severity of symptoms on a scale from 1 (least severe) to 10 (most severe)  </p>
+            <input ref={symptomsRef} type="text" size={50} placeholder='eg. "8"'/>
             </div>
 
             <div>
