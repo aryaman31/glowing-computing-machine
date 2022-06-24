@@ -6,9 +6,9 @@ import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay"
-import "./react-big-calendar.css"
+import "./../css/react-big-calendar.css"
 import Slot from './Slot';
-import { doctorDummyOptions } from './PatientBookingRequests';
+import { doctorDummyOptions } from './../admin/PatientBookingRequests';
 import Select from 'react-select';
 
 

@@ -1,5 +1,5 @@
 import Appointment from './Appointment'
-import Dialog from './Dialog.jsx'
+import Dialog from '../Dialog.jsx'
 import {useState, useRef } from 'react'
 
 

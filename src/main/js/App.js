@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Home';
-import BookPageOne from './BookPageOne';
-import BookPageTwo from './BookPageTwo.js';
-import BookPageThree from './BookPageThree.js';
-import ViewAppointmentPage from './ViewAppointmentPage';
-import YourAppointmentPage from './YourAppointmentPage';
-import AppointmentNote from './AppointmentNote';
-import Login from './Login';
+import Home from './patients/Home';
+import BookPageOne from './patients/BookPageOne';
+import BookPageTwo from './patients/BookPageTwo.js';
+import BookPageThree from './patients/BookPageThree.js';
+import ViewAppointmentPage from './patients/ViewAppointmentPage';
+import YourAppointmentPage from './patients/YourAppointmentPage';
+import AppointmentNote from './widgets/AppointmentNote';
+import Login from './patients/Login';
 import AdminOrPatient from './AdminOrPatient';
-import AdminLogin from './AdminLogin';
-import AdminHome from './AdminHome.js';
-import PatientBookingRequests from './PatientBookingRequests.js';
+import AdminLogin from './admin/AdminLogin';
+import AdminHome from './admin/AdminHome.js';
+import PatientBookingRequests from './admin/PatientBookingRequests.js';
 
 const KEY_1 = 'app.upcomings'
 const KEY_2 = 'app.allAppoints'

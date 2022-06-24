@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, Views } from 'react-big-calendar'
-import "./react-big-calendar.css"
-import PatientAppointment from './PatientAppointment';
-import { localizer } from './BookPageThree';
+import "./../css/react-big-calendar.css"
+import PatientAppointment from './../patients/PatientAppointment';
+import { localizer } from './../patients/BookPageThree';
 import Select from 'react-select';
 
 export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},

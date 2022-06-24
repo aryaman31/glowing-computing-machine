@@ -1,5 +1,5 @@
 import React from 'react'
-import AppointmentList from './AppointmentList'
+import AppointmentList from '../widgets/AppointmentList'
 import { Link } from 'react-router-dom'
 import PreviousAppointments from './PreviousAppointments'
 
