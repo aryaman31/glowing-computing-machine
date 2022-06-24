@@ -5,7 +5,7 @@ import "./../css/react-big-calendar.css"
 import PatientAppointment from './../patients/PatientAppointment';
 import { localizer } from './../patients/BookPageThree';
 import Select from 'react-select';
-import { returnNoSameSlots } from './App';
+import { returnNoSameSlots } from './../App';
 
 export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},
 {value: 'Dr Garcia' , label: 'Dr Garcia'},
