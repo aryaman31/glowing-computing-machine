@@ -15,21 +15,22 @@ export default function YourAppointmentPage({ upcomings }) {
 
       {/* <p>TODO: add queue interface for expected wait times</p> */}
 
-      <p>---------------------------------------------------------------------</p>
+      <hr/>
 
       <h2>Appointment: </h2>
 
       <AppointmentDetail appoint={appoint}/>
 
+      <hr/>
+
       <div>
-        <p>---------------------------------------------------------------------</p>
         <p>To enquire about your appointment dial: 020 7794 0500</p>
       </div>
 
 
-      <div>
+      <div className='row'>
         <Link to="/view" className='btn'>Back</Link>
-     </div>
+      </div>
       
     </>
   )

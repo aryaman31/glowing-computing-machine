@@ -1,7 +1,6 @@
 import Appointment from './Appointment'
-import Dialog from '../Dialog.jsx'
-import {useState, useRef } from 'react'
-
+import Dialog from './Dialog.jsx'
+import {useState, useRef, Fragment } from 'react'
 
 export default function AppointmentList({ upcomings, setUpcoming, allAppoints, setAllAppoints }) {
 
@@ -41,7 +40,7 @@ export default function AppointmentList({ upcomings, setUpcoming, allAppoints, s
   return (
     upcomings.map(a => {
         return (
-          <div key={a.id}>
+          <Fragment key={a.id}>
             <Appointment appointment={a}/>
 
             <button onClick={() => handleCancel(a.id)} className='btn small-width'>
@@ -50,7 +49,7 @@ export default function AppointmentList({ upcomings, setUpcoming, allAppoints, s
 
             { dialog.isLoading && <Dialog onDialog={areUSureDelete} message={dialog.message}/>}
             <hr/>
-          </div>
+          </Fragment>
         )
     })
   )

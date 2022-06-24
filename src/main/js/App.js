@@ -68,17 +68,17 @@ function App() {
   //   fetch()
   // })
 
-  useEffect(() => {
-    const storedUpcomings = JSON.parse(localStorage.getItem(KEY_1))
-    if (storedUpcomings) {
-      setUpcoming(storedUpcomings)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const storedUpcomings = JSON.parse(localStorage.getItem(KEY_1))
+  //   if (storedUpcomings) {
+  //     setUpcoming(storedUpcomings)
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    localStorage.setItem(KEY_1, JSON.stringify(upcomings));
-    console.log("IM HERREERREER");
-  }, [upcomings])
+  // useEffect(() => {
+  //   localStorage.setItem(KEY_1, JSON.stringify(upcomings));
+  //   console.log("IM HERREERREER");
+  // }, [upcomings])
 
   useEffect(() => {
     const storedAllAppoints = JSON.parse(localStorage.getItem(KEY_2))
@@ -102,6 +102,13 @@ function App() {
     setDisplayAppoints(returnNoSameSlots(temp))
   }, [allAppoints])
 
+  useEffect(() => {
+    //for current patient
+    const upcomingTemp = [...allAppoints]
+    const currPatientUpcoming = upcomingTemp.filter((elem) => elem.name === name)
+    setUpcoming(currPatientUpcoming)
+  }, [allAppoints, name])
+
   return (
     <Router>
       <div className='app'>
@@ -116,10 +123,7 @@ function App() {
             <Route path="/admin_home" element={<AdminHome adminName={adminName}/>} />
 
             <Route path="/patient_booking_requests" 
-              element={<PatientBookingRequests 
-                          allAppoints={allAppoints} 
-                          displayAppoints={displayAppoints}/>
-                      } />
+              element={<PatientBookingRequests allAppoints={allAppoints} />} />
 
 
             // removed setPatientId=...
