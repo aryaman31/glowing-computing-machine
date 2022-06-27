@@ -173,6 +173,29 @@ public class DBWrapper implements DB {
     }
 
     @Override
+    public Integer getPatientId(String name) {
+        System.out.println("IN CORRECT FUNCTION");
+        if (!this.makeConnection()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement patientQuery = con.prepareStatement("SELECT * FROM patients WHERE first_name= ?");
+            patientQuery.setString(1, name);
+            ResultSet patientResult = patientQuery.executeQuery();
+            if (!patientResult.next()) {
+                return null;
+            }
+            return patientResult.getInt("patient_id");
+        } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
+            return null;
+        } finally {
+            this.closeConnection();
+        }
+    }
+
+    @Override
     public GP getGP(int gpId) {
         if (!this.makeConnection()) {
             return null;

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-export default function Login({ name, setName }) {
+export default function Login({ name, setName, setPatientId }) {
 
   const navigate = useNavigate();
 
@@ -13,6 +13,9 @@ export default function Login({ name, setName }) {
     event.preventDefault();
 
     //TODO: add to database
+    fetch(`/api/patientId?name=${name}`)
+      .then(response => response.json())
+      .then(data => setPatientId(data));
     console.log(name);
     console.log(password);
 

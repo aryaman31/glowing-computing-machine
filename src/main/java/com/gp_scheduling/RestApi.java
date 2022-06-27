@@ -38,6 +38,12 @@ public class RestApi {
         return db.getPatient(id);
     }
 
+    @GetMapping("/api/patientId")
+    public Integer gpatientId(@RequestParam(name = "name") String name) {
+        //System.out.println(db.getPatientId(name));
+        return db.getPatientId(name);
+    } 
+
     @GetMapping("/api/gp")
     public GP ggp(@RequestParam(name = "id") int id) {
         /**

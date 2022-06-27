@@ -127,7 +127,7 @@ function App() {
 
 
             // removed setPatientId=...
-            <Route path="/patient_login" element={<Login name={name} setName={setName}/>}/>  
+            <Route path="/patient_login" element={<Login name={name} setName={setName} setPatientId={setPatientId} />}/>  
 
 
             <Route path="/home" element={<Home name={name}/>}/>
@@ -148,6 +148,7 @@ function App() {
                 problem={problem}
                 description={description}
                 displayAppoints={displayAppoints}
+                patientId={patientId}
                  />              
             } />
 
