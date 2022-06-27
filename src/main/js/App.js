@@ -123,7 +123,7 @@ function App() {
             <Route path="/admin_home" element={<AdminHome adminName={adminName}/>} />
 
             <Route path="/patient_booking_requests" 
-              element={<PatientBookingRequests allAppoints={allAppoints} />} />
+              element={<PatientBookingRequests allAppoints={allAppoints} setAllAppoints={setAllAppoints} />} />
 
 
             // removed setPatientId=...

@@ -15,7 +15,13 @@ export default function Login({ name, setName, setPatientId }) {
     //TODO: add to database
     fetch(`/api/patientId?name=${name}`)
       .then(response => response.json())
-      .then(data => setPatientId(data));
+      .then(data => {
+        setPatientId(data);
+        console.log(data)
+      }).catch(() => {
+        setPatientId(0);
+      });
+
     console.log(name);
     console.log(password);
 
@@ -39,7 +45,7 @@ export default function Login({ name, setName, setPatientId }) {
                   <label>Password</label>
                   <input
                   id="password"
-                  type="text"
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   />

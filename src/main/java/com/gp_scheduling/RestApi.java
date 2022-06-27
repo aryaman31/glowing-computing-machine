@@ -40,7 +40,6 @@ public class RestApi {
 
     @GetMapping("/api/patientId")
     public Integer gpatientId(@RequestParam(name = "name") String name) {
-        //System.out.println(db.getPatientId(name));
         return db.getPatientId(name);
     } 
 
@@ -161,5 +160,10 @@ public class RestApi {
         return db.markAppointment(gp_id,logic.getTimeStamp(start_time),notes);
     }
 
-
+    @GetMapping("/api/email")
+    public void sendEmail(@RequestParam(name = "to") String to, 
+                          @RequestParam(name = "subject") String subject,
+                          @RequestParam(name = "msg") String msg) {
+        LogicFunctions.sendEmail(to, subject, msg);
+    }
 }

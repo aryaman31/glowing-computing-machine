@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 export default function PatientAppointment({ appoint }) {
   return (
@@ -7,7 +7,11 @@ export default function PatientAppointment({ appoint }) {
     <p>Patient name: {appoint.name}</p>
     <p>Problem faced: {appoint.problem}</p>
     <p>Description:</p>
-    {appoint.description.split('\n').map(str => <p id={appoint.id}>{str}</p>)}
+    {appoint.description.split('\n').map(str => 
+      <Fragment key={str}>
+        <p >{str}</p>
+      </Fragment>
+      )}
 
     </>
   )
