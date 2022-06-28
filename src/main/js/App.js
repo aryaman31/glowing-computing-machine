@@ -41,12 +41,15 @@ export function returnNoSameSlots(arr) {
 
 function App() {
 
-  const [name, setName] = useState('');
 
   const [adminName, setAdminName] = useState('')
 
   const [upcomings, setUpcoming] = useState([]);
 
+  const [nhsNumber, setNhsNumber] = useState();
+
+  // nhs number replaces the below:
+  const [name, setName] = useState('');
   const [patientId, setPatientId] = useState();
   //get all appointments from database
   const [allAppoints, setAllAppoints] = useState([]) 
@@ -127,28 +130,27 @@ function App() {
 
 
             // removed setPatientId=...
-            <Route path="/patient_login" element={<Login name={name} setName={setName} setPatientId={setPatientId} />}/>  
+            <Route path="/patient_login" element={<Login nhsNumber={nhsNumber} setNhsNumber={setNhsNumber}/>}/>  
 
 
-            <Route path="/home" element={<Home name={name}/>}/>
+            <Route path="/home" element={<Home nhsNumber={nhsNumber}/>}/>
 
             // first booking page
-            <Route path="/book_appointment" element={<BookPageOne name={name}/>} />
+            <Route path="/book_appointment" element={<BookPageOne nhsNumber={nhsNumber}/>} />
             // second booking page
-            <Route path="/appointment_details" element={<BookPageTwo name={name} setProblem={setProblem} setDescription={setDescription}/>} />
+            <Route path="/appointment_details" element={<BookPageTwo nhsNumber={nhsNumber} setProblem={setProblem} setDescription={setDescription}/>} />
             // third booking page
             <Route path="/appointment_slot"
             element={
               <BookPageThree 
                 setUpcoming={setUpcoming} 
-                name={name} 
+                nhsNumber={nhsNumber} 
                 setAllAppoints={setAllAppoints} 
                 doctor={doctor}
                 setDoctor={setDoctor}
                 problem={problem}
                 description={description}
                 displayAppoints={displayAppoints}
-                patientId={patientId}
                  />              
             } />
 

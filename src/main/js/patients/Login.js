@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-export default function Login({ name, setName, setPatientId }) {
+export default function Login({ nhsNumber, setNhsNumber }) {
 
   const navigate = useNavigate();
 
@@ -13,16 +13,26 @@ export default function Login({ name, setName, setPatientId }) {
     event.preventDefault();
 
     //TODO: add to database
-    fetch(`/api/patientId?name=${name}`)
+    // fetch(`/api/patientId?name=${name}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     setPatientId(data);
+    //     console.log(data)
+    //   }).catch(() => {
+    //     setPatientId(0);
+    //   });
+
+      fetch(`/api/patientId?name=${nhsNumber}`)
       .then(response => response.json())
       .then(data => {
-        setPatientId(data);
+        setNhsNumber(nhsNumber);
         console.log(data)
       }).catch(() => {
-        setPatientId(0);
+        setNhsNumber(0);
       });
 
-    console.log(name);
+
+    // console.log(name);
     console.log(password);
 
     navigate('/home')
@@ -37,8 +47,8 @@ export default function Login({ name, setName, setPatientId }) {
                   <input
                   id="name"
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={nhsNumber}
+                  onChange={(e) => setNhsNumber(e.target.value)}
                   />
             </div>
             <div className='login-form-field'>
