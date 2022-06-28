@@ -46,11 +46,11 @@ function App() {
 
   const [upcomings, setUpcoming] = useState([]);
 
-  const [nhsNumber, setNhsNumber] = useState();
+  // const [nhsNumber, setNhsNumber] = useState();
 
-  // nhs number replaces the below:
-  const [name, setName] = useState('');
-  const [patientId, setPatientId] = useState();
+  // // nhs number replaces the below:
+  // const [name, setName] = useState('');
+  // const [patientId, setPatientId] = useState();
   //get all appointments from database
   const [allAppoints, setAllAppoints] = useState([]) 
 
@@ -65,6 +65,9 @@ function App() {
   const [problem, setProblem] = useState()
 
   const [description, setDescription] = useState()
+  
+  const [patient, setPatient] = useState({patient_id: 0, first_name: "", surname: "",
+        clinic_id: 0, hospital_id: 0, salted: "", salt: "", email: ""})
 
 
   // useEffect(() => {
@@ -130,21 +133,20 @@ function App() {
 
 
             // removed setPatientId=...
-            <Route path="/patient_login" element={<Login nhsNumber={nhsNumber} setNhsNumber={setNhsNumber}/>}/>  
+            <Route path="/patient_login" element={<Login setPatient={setPatient}/>}/>  
 
-
-            <Route path="/home" element={<Home nhsNumber={nhsNumber}/>}/>
+            <Route path="/home" element={<Home patient={patient} />}/>
 
             // first booking page
-            <Route path="/book_appointment" element={<BookPageOne nhsNumber={nhsNumber}/>} />
+            <Route path="/book_appointment" element={<BookPageOne patient={patient}/>} />
             // second booking page
-            <Route path="/appointment_details" element={<BookPageTwo nhsNumber={nhsNumber} setProblem={setProblem} setDescription={setDescription}/>} />
+            <Route path="/appointment_details" element={<BookPageTwo patient={patient} setProblem={setProblem} setDescription={setDescription}/>} />
             // third booking page
             <Route path="/appointment_slot"
             element={
               <BookPageThree 
                 setUpcoming={setUpcoming} 
-                nhsNumber={nhsNumber} 
+                patient={patient} 
                 setAllAppoints={setAllAppoints} 
                 doctor={doctor}
                 setDoctor={setDoctor}

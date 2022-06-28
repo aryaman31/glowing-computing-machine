@@ -26,7 +26,7 @@ export const localizer = dateFnsLocalizer({
 
 
 
-export default function BookPageThree({ setUpcoming, nhsNumber, 
+export default function BookPageThree({ setUpcoming, patient, 
   setAllAppoints, doctor, setDoctor, problem, description, displayAppoints }) {
 
 
@@ -101,7 +101,7 @@ export default function BookPageThree({ setUpcoming, nhsNumber,
       setAllAppoints(prev => {
         return [...prev, { start: startTime, end: endTime, title: "lul",
         id: newId,
-        nhsNumber: nhsNumber, 
+        patient: patient.first_name, 
         doctor: doctor,
         time: printDate + ' ' + printStartTime + '-' + printEndTime, 
         problem: problem, 

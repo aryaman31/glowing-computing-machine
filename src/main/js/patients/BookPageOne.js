@@ -2,14 +2,14 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function BookPageOne({ nhsNumber }) {
+export default function BookPageOne({ patient }) {
 
 
 
 
     return (
         <>
-            <h1> Let's book an appointment, {nhsNumber}! </h1>
+            <h1> Let's book an appointment, {patient.first_name}! </h1>
 
             <hr/>
 

@@ -2,39 +2,26 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
-export default function Login({ nhsNumber, setNhsNumber }) {
+export default function Login({ setPatient }) {
 
   const navigate = useNavigate();
 
   const [password, setPassword] = useState(''); 
+  const [nhsNumber, setNhsNumber] = useState(0);
 
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    //TODO: add to database
-    // fetch(`/api/patientId?name=${name}`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     setPatientId(data);
-    //     console.log(data)
-    //   }).catch(() => {
-    //     setPatientId(0);
-    //   });
-
-      fetch(`/api/patientId?name=${nhsNumber}`)
+      fetch(`/api/patient?id=${nhsNumber}`)
       .then(response => response.json())
       .then(data => {
-        setNhsNumber(nhsNumber);
+        setPatient(data);
         console.log(data)
       }).catch(() => {
-        setNhsNumber(0);
+        console.log("Error couldnt find patient");
       });
-
-
-    // console.log(name);
-    console.log(password);
-
+      
     navigate('/home')
   }
 
@@ -43,10 +30,11 @@ export default function Login({ nhsNumber, setNhsNumber }) {
         <h1>Login</h1>
         <form onSubmit={handleSubmit} className='login-form center'>
             <div className='login-form-field'>
-                <label>Name</label>
+                <label>NHS Id</label>
                   <input
                   id="name"
                   type="text"
+                  // defaultValue={null}
                   value={nhsNumber}
                   onChange={(e) => setNhsNumber(e.target.value)}
                   />
