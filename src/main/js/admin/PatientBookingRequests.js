@@ -59,7 +59,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
 
       console.log("i am the patient")
 
-      console.log(a.name)
+      // console.log(a.name)
       
       const subject = "confirmed"
       const msg = `ur mom`

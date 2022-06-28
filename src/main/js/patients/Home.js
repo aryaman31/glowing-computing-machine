@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Home({ name }) {
+export default function Home({ nhsNumber }) {
   return (
     <div className='fit-to-page center column'>
-      <h1>Welcome, {name}!</h1>
+      <h1>Welcome, {nhsNumber}!</h1>
       <h2>What would you like to do?</h2>
 
       <div className='options login-form'>

@@ -5,7 +5,7 @@ import Select from 'react-select';
 
 
 
-export default function BookPageOne({ name, setProblem, setDescription }) {
+export default function BookPageOne({ nhsNumber, setProblem, setDescription }) {
 
 
   const problemRef = useRef()
@@ -69,7 +69,7 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
 
             {/* heading */}
 
-            <h1>Let us know more about your appointment, {name}</h1>
+            <h1>Let us know more about your appointment, {nhsNumber}</h1>
             
             <hr/>
 
