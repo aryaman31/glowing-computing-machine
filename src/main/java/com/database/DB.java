@@ -46,4 +46,5 @@ public interface DB {
 
     public boolean notify(String email,String subject, String message);
 
+    BookingRequest getPatientBookingRequest(int patient_id);
 }

@@ -480,6 +480,34 @@ public class DBWrapper implements DB {
     }
 
     @Override
+    public BookingRequest getPatientBookingRequest(int patient_id) {
+        this.makeConnection();
+        try {
+            PreparedStatement stat = con.prepareStatement("SELECT * FROM booking_requests WHERE patient_id = ?");
+            stat.setInt(1, patient_id);
+            ResultSet res = stat.executeQuery();
+            if (res.next()) {
+                return new BookingRequest(
+                        res.getInt("patient_id"),
+                        res.getInt("gp_id"),
+                        Arrays.asList((Timestamp[]) res.getArray("start_times").getArray()),
+                        res.getTimestamp("request_time"),
+                        res.getString("subject"),
+                        res.getString("appt_details")
+
+                );
+            } else {
+                return null;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+        return null;
+    }
+
+    @Override
     public boolean makeConnection() {
 
         /**

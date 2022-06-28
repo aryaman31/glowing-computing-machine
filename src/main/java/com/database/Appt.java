@@ -1,6 +1,7 @@
 package com.database;
 
 import com.gp_scheduling.LogicFunctions;
+import net.minidev.json.JSONObject;
 
 import java.awt.print.Book;
 import java.sql.PreparedStatement;
@@ -93,7 +94,7 @@ public class Appt implements Storeable {
         return appt_details;
     }
 
-    public boolean isCancelled() {
+    public boolean isCompleted() {
         return completed;
     }
 
@@ -141,5 +142,18 @@ public class Appt implements Storeable {
         }
         db.closeConnection();
         return true;
+    }
+
+ //   @Override
+    public JSONObject toJSON() {
+        JSONObject toRet = new JSONObject();
+        toRet.appendField("patient_id",this.patient_id);
+        toRet.appendField("gp_id",this.gp_id);
+        toRet.appendField("start_time",LogicFunctions.getStringTime(this.start_time));
+        toRet.appendField("end_time",LogicFunctions.getStringTime(this.end_time));
+        toRet.appendField("subject",this.subject);
+        toRet.appendField("appt_details",this.appt_details);
+        toRet.appendField("completed",this.completed);
+        return toRet;
     }
 }

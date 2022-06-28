@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Book;
 import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class RestApi {
     }
 
     @GetMapping("/api/numGpAppt")
-    public int getNumGPAppointments(@RequestParam(name = "id") int id, @RequestParam(name = "currTime") String currTimestamp,
+    public int getNumGpAppt(@RequestParam(name = "id") int id, @RequestParam(name = "currTime") String currTimestamp,
                                     @RequestParam(name = "startTime") String sTimestamp) {
         /**
          * Gets the number of uncompleted appointments for a given gp (provided by id in "id") until a
@@ -165,5 +166,23 @@ public class RestApi {
                           @RequestParam(name = "subject") String subject,
                           @RequestParam(name = "msg") String msg) {
         LogicFunctions.sendEmail(to, subject, msg);
+    }
+
+    @GetMapping("/api/getAppointmentsForPatient")
+    public List<Appt> getAppointmentsForPatient(@RequestParam(name = "patient_id") int patient) {
+        List<Appt> appts =  db.getAllAppts(patient);
+        return appts.stream().filter(appt -> !appt.isCompleted()).toList();
+    }
+
+    @GetMapping("/api/getRequestedAppointment")
+    public BookingRequest getRequestedAppointment(@RequestParam(name = "patient_id") int patient) {
+        BookingRequest appt = db.getPatientBookingRequest(patient);
+        return appt;
+    }
+
+    @GetMapping("/api/getPastAppointmentsForPatient")
+    public List<Appt> getPastApptsForPatient(@RequestParam(name = "patient_id") int patient) {
+        List<Appt> appts = db.getAllAppts(patient);
+        return appts.stream().filter(appt->appt.isCompleted()).toList();
     }
 }

@@ -1,5 +1,7 @@
 package com.database;
 
+import net.minidev.json.JSONObject;
+
 import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -101,4 +103,6 @@ public class BookingRequest implements Storeable {
         db.closeConnection();
         return true;
     }
+
+
 }

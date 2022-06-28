@@ -6,6 +6,7 @@ import java.awt.print.Book;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -109,6 +110,16 @@ public class LogicFunctions {
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static String getStringTime(Timestamp dateTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("\"yyyy/MM/dd HH:mm\"");
+        try {
+            return sdf.format(new Date(dateTime.getTime()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
