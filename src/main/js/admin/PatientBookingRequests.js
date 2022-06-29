@@ -4,7 +4,7 @@ import { Calendar, Views } from 'react-big-calendar'
 import "./../css/react-big-calendar.css"
 import PatientAppointment from './../patients/PatientAppointment';
 import { localizer } from './../patients/BookPageThree';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { returnNoSameSlots } from './../App';
 
 export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},
@@ -78,11 +78,24 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
         <p>Please select a doctor to view their appointments</p>
 
 
-        <Select
-          options={doctorDummyOptions}
-          onChange={(e) => {setCurrDoctor(e.value)}} 
-          placeholder="Choose a doctor from the dropdown below"
-        />
+        <AsyncSelect
+              cacheOptions
+              defaultOptions
+              loadOptions={ () =>
+                fetch("/api/allgps").then(response => response.json())
+                .then(data => {
+                  var gps = [];
+                  for (var i = 0; i < data.length; i++) {
+                    gps.push({value: `${data[i].first_name} ${data[i].surname}`, 
+                    label: `${data[i].first_name} ${data[i].surname}`})
+                  }
+                  console.log(gps);
+                  return gps;
+                })
+                }
+              onChange={(e) => {setCurrDoctor(e.value)}} 
+              placeholder="Choose a doctor from the dropdown below"
+            />
 
         <p><b>Currently viewing the appointments of: </b> {currDoctor}</p>
 

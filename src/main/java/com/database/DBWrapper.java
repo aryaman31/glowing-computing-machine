@@ -130,7 +130,7 @@ public class DBWrapper implements DB {
             Patient charlie = new Patient(3,"Charlie","Skinner",1,1,"","", "charlie.skinner@gmail.com");
             charlie.save(this);
 
-            GP thomas = new GP(111,"Thomas","Jackson","","",
+            GP thomas = new GP(111,"Dr","Jackson","","",
                     "thomas.jackson@gmail.com");
             thomas.save(this);
 
@@ -227,6 +227,38 @@ public class DBWrapper implements DB {
                             gpResult.getString("email")
                     );
             return gp;
+        } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
+            return null;
+        } finally {
+            this.closeConnection();
+        }
+    }
+
+    @Override
+    public List<GP> getAllGps() {
+        if (!this.makeConnection()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement gpQuery = con.prepareStatement("TABLE gps");
+            ResultSet gpResult = gpQuery.executeQuery();
+            List<GP> allgps = new ArrayList<>();
+            while (gpResult.next()) {
+                GP gp =
+                    new GP(
+                            gpResult.getInt("gp_id"),
+                            gpResult.getString("first_name"),
+                            gpResult.getString("surname"),
+                            gpResult.getString("salted"),
+                            gpResult.getString("salt"),
+                            gpResult.getString("email")
+                    );
+                allgps.add(gp);
+            }
+            
+            return allgps;
         } catch (SQLException E) {
             System.out.println(E.getStackTrace());
             return null;

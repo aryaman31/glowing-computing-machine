@@ -9,7 +9,7 @@ import getDay from "date-fns/getDay"
 import "./../css/react-big-calendar.css"
 import Slot from './Slot';
 import { doctorDummyOptions } from './../admin/PatientBookingRequests';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 
 export const locales = {
@@ -34,6 +34,12 @@ export default function BookPageThree({ setUpcoming, patient,
     const [endTime, setEndTime] = useState(new Date())  
     const [hasSelected, setHasSelected] = useState(false)
 
+
+    // fetch("/api/allgps").then(response => response.json())
+    //     .then(data => {
+    //       const result = data.map(x => {value: `${x.first_name} ${x.surname}`});
+    //       console.log(result);
+    //   });
     // // lets the user do up to 5 slots 
     // const 
 
@@ -101,7 +107,7 @@ export default function BookPageThree({ setUpcoming, patient,
       setAllAppoints(prev => {
         return [...prev, { start: startTime, end: endTime, title: "lul",
         id: newId,
-        patient: patient.first_name, 
+        name: patient.first_name, 
         doctor: doctor,
         time: printDate + ' ' + printStartTime + '-' + printEndTime, 
         problem: problem, 
@@ -130,8 +136,21 @@ export default function BookPageThree({ setUpcoming, patient,
          <div>
             <p>Please select a doctor you would like to meet</p>
 
-            <Select
-              options={doctorDummyOptions}
+            <AsyncSelect
+              cacheOptions
+              defaultOptions
+              loadOptions={ () =>
+                fetch("/api/allgps").then(response => response.json())
+                .then(data => {
+                  var gps = [];
+                  for (var i = 0; i < data.length; i++) {
+                    gps.push({value: `${data[i].first_name} ${data[i].surname}`, 
+                    label: `${data[i].first_name} ${data[i].surname}`})
+                  }
+                  console.log(gps);
+                  return gps;
+                })
+                }
               onChange={(e) => {setDoctor(e.value)}} 
               placeholder="Choose a doctor from the dropdown below"
             />
@@ -184,5 +203,5 @@ export default function BookPageThree({ setUpcoming, patient,
             <h3> Step 3 of 3</h3>
       
         </>
-    )
+    );
 }

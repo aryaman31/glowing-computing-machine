@@ -111,9 +111,9 @@ function App() {
   useEffect(() => {
     //for current patient
     const upcomingTemp = [...allAppoints]
-    const currPatientUpcoming = upcomingTemp.filter((elem) => elem.name === name)
+    const currPatientUpcoming = upcomingTemp.filter((elem) => {console.log(elem.name);console.log(patient.first_name); elem.name === patient.first_name})
     setUpcoming(currPatientUpcoming)
-  }, [allAppoints, name])
+  }, [allAppoints, patient.first_name])
 
   return (
     <Router>

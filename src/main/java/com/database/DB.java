@@ -31,6 +31,8 @@ public interface DB {
 
     public GP getGP(int gpId);
 
+    public List<GP> getAllGps();
+
     public Appt getAppt(Timestamp startTime, int gpId);
 
     public List<Appt> getBookingRequests(Timestamp timeslo, int gpId);

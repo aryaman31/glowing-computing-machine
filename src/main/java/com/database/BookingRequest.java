@@ -13,12 +13,11 @@ public class BookingRequest implements Storeable {
     DB db;
     private int patient_id;
     private int gp_id;
-
     private List<Timestamp> start_times;
-
     private Timestamp request_time;
     private String subject;
     private String appt_details;
+
     public BookingRequest(int patient_id, int gp_id, List<Timestamp> start_times, Timestamp request_time, String subject, String appt_details) {
         this.patient_id = patient_id;
         this.gp_id = gp_id;
