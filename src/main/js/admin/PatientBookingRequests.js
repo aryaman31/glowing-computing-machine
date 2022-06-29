@@ -60,9 +60,15 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
       console.log("i am the patient")
 
       console.log(a.name)
-      
+
       const subject = "Confirmed Booking"
-      const msg = `We have confirmed your booking at the gp.`
+      const msg = `We have confirmed your booking at the gp. Check below for the details of your appointment.\n\n
+                   Appointment Details:\n
+                   Appointment time: ${a.time} \n
+                   Doctor: ${a.doctor} \n
+                   Problem faced: ${a.problem} \n
+                   ${a.description}`
+
       //send email
       fetch(`/api/email?to=dummy.patient26@gmail.com&subject=${subject}&msg=${msg}`);
     }
