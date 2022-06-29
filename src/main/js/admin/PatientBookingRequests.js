@@ -43,7 +43,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
 
       for (let i = 0; i < temp.length; i++) {
        
-        if (temp[i].confirm) {
+        if (temp[i].confirm && (temp[i].start === a.start)) {
           temp[i].confirm = false
         }
         
@@ -61,8 +61,8 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
 
       console.log(a.name)
       
-      const subject = "confirmed"
-      const msg = `ur mom`
+      const subject = "Confirmed Booking"
+      const msg = `We have confirmed your booking at the gp.`
       //send email
       fetch(`/api/email?to=dummy.patient26@gmail.com&subject=${subject}&msg=${msg}`);
     }
