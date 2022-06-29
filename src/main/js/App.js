@@ -123,11 +123,11 @@ function App() {
             <Route path="/admin_home" element={<AdminHome adminName={adminName}/>} />
 
             <Route path="/patient_booking_requests" 
-              element={<PatientBookingRequests allAppoints={allAppoints} />} />
+              element={<PatientBookingRequests allAppoints={allAppoints} setAllAppoints={setAllAppoints} />} />
 
 
             // removed setPatientId=...
-            <Route path="/patient_login" element={<Login name={name} setName={setName}/>}/>  
+            <Route path="/patient_login" element={<Login name={name} setName={setName} setPatientId={setPatientId} />}/>  
 
 
             <Route path="/home" element={<Home name={name}/>}/>
@@ -148,6 +148,7 @@ function App() {
                 problem={problem}
                 description={description}
                 displayAppoints={displayAppoints}
+                patientId={patientId}
                  />              
             } />
 

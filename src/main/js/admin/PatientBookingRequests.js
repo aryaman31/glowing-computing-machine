@@ -11,7 +11,7 @@ export const doctorDummyOptions = [{value: 'Dr Smith' , label: 'Dr Smith'},
 {value: 'Dr Garcia' , label: 'Dr Garcia'},
 {value: 'Dr Jones' , label: 'Dr Jones'} ]
 
-export default function PatientBookingRequests({ allAppoints }) {
+export default function PatientBookingRequests({ allAppoints, setAllAppoints }) {
 
   const [thisDaySlots, setThisDaySlots] = useState([])
   const [currDoctor, setCurrDoctor] = useState("")
@@ -34,6 +34,39 @@ export default function PatientBookingRequests({ allAppoints }) {
     console.log(e.start)
     const thisSlotApppoints = temp.filter(elem => elem.start.getTime() === e.start.getTime() && elem.doctor === currDoctor)
     setThisDaySlots(thisSlotApppoints)
+  }
+
+  function handleSendConfirmation(a) {
+
+    if (!a.confirm) {
+      const temp = [...allAppoints]
+
+      for (let i = 0; i < temp.length; i++) {
+       
+        if (temp[i].confirm) {
+          temp[i].confirm = false
+        }
+        
+        if (temp[i].id === a.id) {
+          temp[i].confirm = true
+        }
+      }
+
+      setAllAppoints(temp)
+
+
+      console.log(a)
+
+      console.log("i am the patient")
+
+      console.log(a.name)
+      
+      const subject = "confirmed"
+      const msg = `ur mom`
+      //send email
+      fetch(`/api/email?to=dummy.patient26@gmail.com&subject=${subject}&msg=${msg}`);
+    }
+
   }
 
 
@@ -75,15 +108,15 @@ export default function PatientBookingRequests({ allAppoints }) {
 
         <hr/>
 
-
         <h3>Reserved appointment slots:</h3>
 
         <div className='currSlotAppointments'>
           {thisDaySlots.map(a => {
             return (
               <Fragment key={a.id}>
+                {a.confirm && <h2 style={{color: 'green'}}>Confirmed Slot</h2>}
                 <PatientAppointment appoint={a}/>
-                <button>Send confirmation</button>
+                <button className='btn' onClick={() => handleSendConfirmation(a)}>Send confirmation</button>
                 <hr/>
               </Fragment>
             )

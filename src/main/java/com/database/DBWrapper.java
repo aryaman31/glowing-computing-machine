@@ -134,6 +134,15 @@ public class DBWrapper implements DB {
                     "thomas.jackson@gmail.com");
             thomas.save(this);
 
+            GP smith = new GP(1, "Dr", "Smith", "", "", "dr.smith@gmail.com");
+            smith.save(this);
+
+            GP garcia = new GP(2, "Dr", "Garcia", "", "", "dr.garcia@gmail.com");
+            garcia.save(this);
+
+            GP jones = new GP(3, "Dr", "Jones", "", "", "dr.jones@gmail.com");
+            jones.save(this);
+
         } finally {
             this.closeConnection();
         }
@@ -164,6 +173,29 @@ public class DBWrapper implements DB {
                             patientResult.getString("email")
                     );
             return patient;
+        } catch (SQLException E) {
+            System.out.println(E.getStackTrace());
+            return null;
+        } finally {
+            this.closeConnection();
+        }
+    }
+
+    @Override
+    public Integer getPatientId(String name) {
+        System.out.println("IN CORRECT FUNCTION");
+        if (!this.makeConnection()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement patientQuery = con.prepareStatement("SELECT * FROM patients WHERE first_name= ?");
+            patientQuery.setString(1, name);
+            ResultSet patientResult = patientQuery.executeQuery();
+            if (!patientResult.next()) {
+                return null;
+            }
+            return patientResult.getInt("patient_id");
         } catch (SQLException E) {
             System.out.println(E.getStackTrace());
             return null;

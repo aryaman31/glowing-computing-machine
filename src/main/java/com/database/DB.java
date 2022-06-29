@@ -27,6 +27,8 @@ public interface DB {
 
     public Patient getPatient(int patientId);
 
+    public Integer getPatientId(String name);
+
     public GP getGP(int gpId);
 
     public Appt getAppt(Timestamp startTime, int gpId);

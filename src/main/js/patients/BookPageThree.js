@@ -27,7 +27,7 @@ export const localizer = dateFnsLocalizer({
 
 
 export default function BookPageThree({ setUpcoming, name, 
-  setAllAppoints, doctor, setDoctor, problem, description, displayAppoints }) {
+  setAllAppoints, doctor, setDoctor, problem, description, displayAppoints, patientId }) {
 
 
     const [startTime, setStartTime] = useState(new Date())
@@ -105,7 +105,8 @@ export default function BookPageThree({ setUpcoming, name,
         doctor: doctor,
         time: printDate + ' ' + printStartTime + '-' + printEndTime, 
         problem: problem, 
-        description: description}]
+        description: description,
+        confirm: false}]
       })
 
       //TODO: actually use the data and send to database
@@ -114,6 +115,8 @@ export default function BookPageThree({ setUpcoming, name,
       console.log(problem)
       console.log(description)
       console.log(printDate + ' ' + printStartTime + '-' + printEndTime)
+
+      //fetch(`/api/requestBooking?patient_id=${patiendId}&gp_id`)
   
     }
 
