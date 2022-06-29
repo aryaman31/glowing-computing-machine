@@ -81,18 +81,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
       const details = a.description.split('\n')
 
       const subject = "Confirmed Booking"
-      const msg = `We have confirmed your booking at the gp. Check below for the details of your appointment.<br>
-                   Appointment Details:<br>
-                   Appointment time: ${a.time} <br>
-                   Doctor: ${a.doctor} <br>
-                   Problem faced: ${a.problem} <br>
-                   ${details[0]} <br>
-                   ${details[1]} <br>
-                   ${details[2]} <br>
-                   ${details[3]} <br>
-                   ${details[4]} <br>
-                   ${details[5]} <br>
-                   ${details[6]} <br>`
+      const msg = `We have confirmed your booking at the gp. Check below for the details of your appointment.<br> Appointment Details:<br>Appointment time: ${a.time} <br>Doctor: ${a.doctor} <br>Problem faced: ${a.problem} <br>${details[0]} <br>${details[1]} <br>${details[2]} <br>${details[3]} <br>${details[4]} <br>${details[5]} <br>${details[6]} <br>`
 
       //send email
       fetch(`/api/email?to=dummy.patient26@gmail.com&subject=${subject}&msg=${msg}`);

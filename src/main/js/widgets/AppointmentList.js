@@ -21,6 +21,9 @@ export default function AppointmentList({ upcomings, setUpcoming, allAppoints, s
   function handleCancel(k) {
     handleDialog('Are you sure you want to cancel this appointment?', true)
     idProductRef.current = k
+
+    
+
     // const temp = [...upcomings]
     // setUpcoming(temp.filter(elem => elem.id !== k))
   }
