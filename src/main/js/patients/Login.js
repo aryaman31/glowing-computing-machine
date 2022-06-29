@@ -42,6 +42,13 @@ export default function Login({ name, setName, setPatientId }) {
                   />
             </div>
             <div className='login-form-field'>
+              <label>NHS Id</label>
+              <input
+                id="nhsid"
+                type="text"
+              />
+            </div>
+            <div className='login-form-field'>
                   <label>Password</label>
                   <input
                   id="password"
