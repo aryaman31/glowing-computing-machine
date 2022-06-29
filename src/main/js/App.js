@@ -63,23 +63,6 @@ function App() {
 
   const [description, setDescription] = useState()
 
-
-  // useEffect(() => {
-  //   fetch()
-  // })
-
-  // useEffect(() => {
-  //   const storedUpcomings = JSON.parse(localStorage.getItem(KEY_1))
-  //   if (storedUpcomings) {
-  //     setUpcoming(storedUpcomings)
-  //   }
-  // }, [])
-
-  // useEffect(() => {
-  //   localStorage.setItem(KEY_1, JSON.stringify(upcomings));
-  //   console.log("IM HERREERREER");
-  // }, [upcomings])
-
   useEffect(() => {
     const storedAllAppoints = JSON.parse(localStorage.getItem(KEY_2))
     if (storedAllAppoints) {
@@ -91,6 +74,24 @@ function App() {
       });
       setAllAppoints(storedAllAppoints)
     }
+  }, [])
+
+  useEffect(() => {
+    
+    window.addEventListener('storage', () => {
+      const storedAllAppoints = JSON.parse(localStorage.getItem(KEY_2))
+      if (storedAllAppoints) {
+        storedAllAppoints.forEach(element => {
+          const s = element.start;
+          const e = element.end;
+          element.start = new Date(s)
+          element.end = new Date(e)
+        });
+        setAllAppoints(storedAllAppoints)
+      }  
+    });
+    
+       
   }, [])
 
   useEffect(() => {

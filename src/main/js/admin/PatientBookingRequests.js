@@ -16,6 +16,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
   const [thisDaySlots, setThisDaySlots] = useState([])
   const [currDoctor, setCurrDoctor] = useState("")
   const [doctorSlots, setDoctorSlots] = useState([])
+  const [currSlot, setCurrSlot] = useState()
 
 
   useEffect(() => {
@@ -27,9 +28,25 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
     setThisDaySlots([])
   }, [currDoctor])
 
+  useEffect(() => {
+    if (currDoctor) {
+      console.log({currDoctor})
+      const temp = [...allAppoints]
+      const res = temp.filter(elem => elem.doctor === currDoctor)
+      //returnNoSameSlot so no overlap in display
+      setDoctorSlots(returnNoSameSlots(res))
+    }
+    if (currSlot) {
+      const temp = [...allAppoints]
+      console.log(currSlot.start)
+      const thisSlotApppoints = temp.filter(elem => elem.start.getTime() === currSlot.start.getTime() && elem.doctor === currDoctor)
+      setThisDaySlots(thisSlotApppoints)
+    }
+  }, [allAppoints])
+
 
   function handleSelectEvent(e) {
-    
+    setCurrSlot(e)
     const temp = [...allAppoints]
     console.log(e.start)
     const thisSlotApppoints = temp.filter(elem => elem.start.getTime() === e.start.getTime() && elem.doctor === currDoctor)
@@ -61,13 +78,21 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
 
       console.log(a.name)
 
+      const details = a.description.split('\n')
+
       const subject = "Confirmed Booking"
-      const msg = `We have confirmed your booking at the gp. Check below for the details of your appointment.\n\n
-                   Appointment Details:\n
-                   Appointment time: ${a.time} \n
-                   Doctor: ${a.doctor} \n
-                   Problem faced: ${a.problem} \n
-                   ${a.description}`
+      const msg = `We have confirmed your booking at the gp. Check below for the details of your appointment.<br>
+                   Appointment Details:<br>
+                   Appointment time: ${a.time} <br>
+                   Doctor: ${a.doctor} <br>
+                   Problem faced: ${a.problem} <br>
+                   ${details[0]} <br>
+                   ${details[1]} <br>
+                   ${details[2]} <br>
+                   ${details[3]} <br>
+                   ${details[4]} <br>
+                   ${details[5]} <br>
+                   ${details[6]} <br>`
 
       //send email
       fetch(`/api/email?to=dummy.patient26@gmail.com&subject=${subject}&msg=${msg}`);

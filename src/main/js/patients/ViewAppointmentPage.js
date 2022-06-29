@@ -16,7 +16,7 @@ export default function ViewAppointmentPage({ upcomings, setUpcoming, allAppoint
       <h1>Your appointments</h1>
       
       <div>
-      <p style={{fontWeight: 'bold'}}>Upcoming appointments:</p>
+      <p style={{fontWeight: 'bold'}}>Reserved appointments:</p>
         <AppointmentList 
           upcomings={upcomings} 
           setUpcoming={setUpcoming}
