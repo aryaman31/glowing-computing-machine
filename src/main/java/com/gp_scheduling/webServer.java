@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class webServer {
 	static DB db;
 	public static void main(String[] args) {
-		db = new DBWrapper();
-		db.setup();
-		db.populate();
+		// db = new DBWrapper();
+		// db.setup();
+		// db.populate();
 		SpringApplication.run(webServer.class, args);
 	}
 

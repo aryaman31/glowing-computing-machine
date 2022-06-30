@@ -13,14 +13,14 @@ export default function Login({ name, setName, setPatientId }) {
     event.preventDefault();
 
     //TODO: add to database
-    fetch(`/api/patientId?name=${name}`)
-      .then(response => response.json())
-      .then(data => {
-        setPatientId(data);
-        console.log(data)
-      }).catch(() => {
-        setPatientId(0);
-      });
+    // fetch(`/api/patientId?name=${name}`)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     setPatientId(data);
+    //     console.log(data)
+    //   }).catch(() => {
+    //     setPatientId(0);
+    //   });
 
     console.log(name);
     console.log(password);
