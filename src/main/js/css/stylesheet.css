@@ -127,3 +127,30 @@ label {
 .small-width {
     width: 230px;
 }
+
+.card {
+  background-color: rgb(211, 244, 255);
+  /* opacity: 0.5; */
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border-style: solid;
+}
+
+.thin-card {
+  background-color: rgb(213, 242, 252);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 50% 10px 0%;
+  border-style: solid;
+}
+
+.wide-text-field {
+  height: 30px;
+  width: 100%;
+}
+
+.transparent-box {
+  border-style: solid;
+  margin: 10px;
+}

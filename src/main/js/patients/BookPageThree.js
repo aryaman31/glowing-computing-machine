@@ -126,8 +126,8 @@ export default function BookPageThree({ setUpcoming, name,
 
          <hr/>
 
-
-         <div>
+        
+         <div className='card'>
             <p>Please select a doctor you would like to meet</p>
 
             <Select
@@ -140,7 +140,7 @@ export default function BookPageThree({ setUpcoming, name,
 
 
             
-
+        <div style={{margin: 20}}>
             {/* // TODO: Enable multiple slots  */}
         <p>Please select a date you would like to have your appointment.</p> 
         <p>Blue boxes indicates that the slot has already been reserved</p>
@@ -162,6 +162,7 @@ export default function BookPageThree({ setUpcoming, name,
             slotPropGetter={slotPropGetter}
             min={new Date(2022, 0, 0, 8, 0, 0)}
             max={new Date(2022, 0, 0, 20, 0, 0)}
+            // className="transparent-box"
           />
         </div>
 
@@ -171,6 +172,7 @@ export default function BookPageThree({ setUpcoming, name,
         <Slot startTime={startTime} endTime={endTime} hasSelected={hasSelected} />
 
         <br/>
+        </div>
 
 
         <div className='row'>

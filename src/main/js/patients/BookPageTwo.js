@@ -73,10 +73,10 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
             
             <hr/>
 
-
+            <div className='card'>
             {/* type of appointment*/}
             <div>
-            <p>Please select the type of appointment you would like:</p>
+            <p> <b>Please select the type of appointment you would like: </b></p>
 
             <Select
               options={appointmentCategories}
@@ -89,7 +89,7 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
 
             {/* way of seeing doctor */}
 
-            <p>Would you like an in-person appointment, telephone appointment or home appointment? </p>
+            <p><b>Would you like an in-person appointment, telephone appointment or home appointment? </b></p>
             <p><i>Please note, due to high demand for in-person appointments, certain appointments will be required to be taken over the phone.</i> </p>
 
             <Select
@@ -98,44 +98,46 @@ export default function BookPageOne({ name, setProblem, setDescription }) {
               isOptionDisabled={(option) => option.disabled} 
               placeholder="Choose your preferred way of seeing a doctor from the dropdown below"
             />
-
+            </div>
 
 
             {/* enter details about problem*/}
 
+            <div className='card '>
             <h2>{(category === "discuss blood test result") ? "Remind us why you required a blood test" : ("Tell us why you would like " + category)} </h2>
 
 
                 <div>
-            <p> A brief description of the problem </p>
-            <input ref={problemRef} type="text" size={50} placeholder='eg. "Persistent back-ache"'/>
+            <p> <b>A brief description of the problem </b> </p>
+            <input ref={problemRef} type="text" size={50} placeholder='eg. "Persistent back-ache"' className='wide-text-field'/>
             </div>
 
 
 
             <div>
-            <p>Severity of symptoms on a scale from 1 (least severe) to 10 (most severe)  </p>
-            <input ref={symptomsRef} type="text" size={50} placeholder='eg. "8"'/>
+            <p> <b>Severity of symptoms on a scale from 1 (least severe) to 10 (most severe)  </b></p>
+            <input ref={symptomsRef} type="text" size={50} placeholder='eg. "8"' className='wide-text-field'/>
             </div>
 
             <div>
-            <p> Duration of symptoms </p>
-            <input ref={durationRef} type="text" size={50} required placeholder='eg. "3 weeks"'/>
+            <p> <b> Duration of symptoms </b></p>
+            <input ref={durationRef} type="text" size={50} required placeholder='eg. "3 weeks"' className='wide-text-field'/>
             </div>
 
             <div>
-            <p>(Optional) Anything else the doctor might like to know?</p>
+            <p> <b>(Optional) Anything else the doctor might like to know? </b></p>
             <textarea
                 ref={extraInfoRef}
                 rows={5}
                 cols={50}
-                placeholder='eg. "Experiencing strong pain in upper-back for 4 weeks"'></textarea>
+                placeholder='eg. "Experiencing strong pain in upper-back for 4 weeks"' className='wide-text-field'></textarea>
+            </div>
             </div>
 
             <div className='row'>
-                <Link to="/home" onClick={handleConfirmation} className='btn'>Cancel</Link>
+                <Link to="/home" onClick={handleConfirmation} className='btn'><b>Cancel</b></Link>
 
-                <Link to="/appointment_slot" onClick={handleConfirmation} className='btn'>Next</Link>
+                <Link to="/appointment_slot" onClick={handleConfirmation} className='btn'><b>Next</b></Link>
             </div>
 
             <h3> Step 2 of 3</h3>

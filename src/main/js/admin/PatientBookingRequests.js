@@ -94,7 +94,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
   return (
     <>
         <h1>View patient's booking requests below</h1>
-
+        <div className='card'>
         <p>Please select a doctor to view their appointments</p>
 
 
@@ -103,7 +103,9 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
           onChange={(e) => {setCurrDoctor(e.value)}} 
           placeholder="Choose a doctor from the dropdown below"
         />
+        </div>
 
+        <div style={{margin: "20px"}}>
         <p><b>Currently viewing the appointments of: </b> {currDoctor}</p>
 
         <hr/>
@@ -134,14 +136,17 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
           {thisDaySlots.map(a => {
             return (
               <Fragment key={a.id}>
+                <div className='thin-card'>
                 {a.confirm && <h2 style={{color: 'green'}}>Confirmed Slot</h2>}
                 <PatientAppointment appoint={a}/>
                 <button className='btn' onClick={() => handleSendConfirmation(a)}>Send confirmation</button>
+                </div>
                 <hr/>
               </Fragment>
             )
           })}
           
+        </div>
         </div>
 
         <br/>
