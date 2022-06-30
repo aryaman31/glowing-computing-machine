@@ -85,8 +85,7 @@ export default function PatientBookingRequests({ allAppoints, setAllAppoints }) 
                    Appointment Details:\n 
                    Appointment time: ${a.time} \n 
                    Doctor: ${a.doctor} \n 
-                   Problem faced: \n 
-                   ${a.problem} \n 
+                   Problem faced: ${a.problem} \n \n
                    ${details[0]} \n 
                    ${details[1]} \n
                    ${details[2]} \n

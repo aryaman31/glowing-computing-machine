@@ -30,7 +30,7 @@ export default function Login({ name, setName, setPatientId }) {
 
   return (
       <div className='fit-to-page column center'>
-        <h1>Login</h1>
+        <h1>Patient Login</h1>
         <form onSubmit={handleSubmit} className='login-form center'>
             <div className='login-form-field'>
                 <label>Name</label>
